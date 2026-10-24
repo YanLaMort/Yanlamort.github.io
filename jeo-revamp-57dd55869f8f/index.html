@@ -292,6 +292,21 @@ h2 .lw,h1 .lw{color:var(--blue)}
 .opt .view.on{opacity:1;transform:none}
 .opt .view img{max-width:100%;max-height:100%;display:block;border-radius:16px;box-shadow:0 20px 40px -26px rgba(40,20,10,.5)}
 .opt .view.lg img{max-width:82%;max-height:78%;border-radius:0;box-shadow:none}
+.opt .tab.missing{border-style:dashed;opacity:.62}
+.opt .tab.missing.on{opacity:1;background:none;color:inherit;border-style:dashed;border-width:2px}
+.opt.even .tab.missing.on{color:var(--blue)} .opt:not(.even) .tab.missing.on{color:var(--crimson)}
+.opt .view .ph{width:78%;aspect-ratio:16/9;border:1.5px dashed rgba(31,78,121,.55);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:30px;color:var(--blue);background:rgba(220,230,240,.35)}
+.opt .view .ph b{font-size:34px;font-weight:800;color:var(--crimson);line-height:1.1}
+.opt .view .ph .pl{font-size:17px;line-height:1.5;max-width:460px}
+.opt .view.multi{grid-template-rows:1fr auto;gap:16px}
+.opt .view .stack{position:relative;width:100%;height:100%;min-height:0}
+.opt .view .stack img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;opacity:0;transition:opacity .55s var(--ease)}
+.opt .view .stack img.on{opacity:1}
+.opt .view .subs{display:flex;gap:6px;padding:5px;border-radius:999px;border:1px solid rgba(31,78,121,.3);background:rgba(250,245,236,.9);pointer-events:auto}
+.opt .view .sub{height:34px;padding:0 18px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);transition:background .3s,color .3s}
+.opt .view .sub.on{background:var(--blue);color:var(--cream)}
+.opt .view.ec .ectag{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--blue);opacity:.8}
+.opt .view.ec img{max-height:88%}
 .opt .vtag{position:absolute;right:20px;bottom:16px;font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--blue);opacity:.75}
 .s11o .wrap{position:absolute;inset:58px 72px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .s11o h2{font-size:104px;line-height:1.02}
@@ -391,58 +406,58 @@ body.static .s1 .ring,body.static .bigplay,body.static .rep svg{animation:none!i
 </section>
 
 <!-- logo option 01 -->
-<section class="slide opt" id="opt1" data-notes="Option 01: swirl circle behind the wordmark. On a clean white van, side and rear, and with the blue and red swoosh wrap. One color: white on black.">
+<section class="slide opt" id="opt1" data-default="0" data-notes="Option 01: swirl circle behind the wordmark. On the van: a clean white van and a blue and red swoosh wrap, side and rear (two mockups, switch with the sub-toggle or press V again). Social end card: none was supplied for this option.">
   <div class="left">
     <div class="stagek r" style="--d:0"><span class="num">01</span><span class="kick">Option 01 &nbsp;·&nbsp; Swirl Circle</span></div>
     <h2 class="r" style="--d:1">Swirl <span class="lw">Circle</span></h2>
     <div class="cap r" style="--d:2">Swirl circle behind the wordmark.</div>
-    <div class="ctl r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Views of this option</div><div class="tabs"><button class="tab on" data-v="0">Color logo</button><button class="tab" data-v="1">Van · White</button><button class="tab" data-v="2">Van · Wrap</button><button class="tab" data-v="3">Black &amp; white</button></div></div>
+    <div class="ctl r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Three views &nbsp;·&nbsp; L &nbsp;V&nbsp; E</div><div class="tabs"><button class="tab on" data-v="0">Logo</button><button class="tab" data-v="1">On the Van</button><button class="tab missing" data-v="2">Social End Card</button></div></div>
   </div>
-  <div class="frame r fs" style="--d:2"><div class="view lg on" data-cap="Swirl circle behind the wordmark."><img src="assets/opt1-logo.png" alt="Option 01, Color logo"></div><div class="view " data-cap="Clean white van, side and rear."><img src="assets/opt1-van-white.jpg" alt="Option 01, Van · White"></div><div class="view " data-cap="Blue and red swoosh wrap, side and rear."><img src="assets/opt1-van-wrap.jpg" alt="Option 01, Van · Wrap"></div><div class="view " data-cap="One color: white on black."><img src="assets/opt1-bw.jpg" alt="Option 01, Black & white"></div><span class="vtag">4 VIEWS</span></div>
+  <div class="frame r fs" style="--d:2"><div class="view on lg" data-cap="Swirl circle behind the wordmark."><img src="assets/opt1-logo.png" alt="Option 01 logo"></div><div class="view van multi" data-cap="Clean white van, side and rear."><div class="stack"><img class="vv on" src="assets/opt1-van-white.jpg" alt="Option 01 on the van, clean white"><img class="vv" src="assets/opt1-van-wrap.jpg" alt="Option 01 on the van, swoosh wrap"></div><div class="subs"><button class="sub on" data-s="0" data-cap="Clean white van, side and rear.">Clean white</button><button class="sub" data-s="1" data-cap="Blue and red swoosh wrap, side and rear.">Swoosh wrap</button></div></div><div class="view miss" data-cap="No social end card was supplied for this option."><div class="ph"><span class="lab">Social end card</span><b>No end card supplied</b><span class="pl">Only Option 04 came with a social end card. None was supplied for this option.</span></div></div><span class="vtag">2 OF 3 SUPPLIED</span></div>
 </section>
 
 <!-- logo option 02 -->
-<section class="slide opt even" id="opt2" data-notes="Option 02: pinwheel mark above the wordmark. On the van with the gray swirl graphic, side and rear. One color: white on black.">
+<section class="slide opt even" id="opt2" data-default="0" data-notes="Option 02: pinwheel mark above the wordmark. On the van with the gray swirl graphic, side and rear. Social end card: none was supplied for this option.">
   <div class="left">
     <div class="stagek r" style="--d:0"><span class="num b">02</span><span class="kick">Option 02 &nbsp;·&nbsp; Pinwheel</span></div>
     <h2 class="r" style="--d:1"><span class="lw">Pinwheel</span></h2>
     <div class="cap r" style="--d:2">Pinwheel mark above the wordmark.</div>
-    <div class="ctl r" style="--d:4"><div class="rule b" style="--d:4"></div><div class="lab">Views of this option</div><div class="tabs"><button class="tab on" data-v="0">Color logo</button><button class="tab" data-v="1">On the van</button><button class="tab" data-v="2">Black &amp; white</button></div></div>
+    <div class="ctl r" style="--d:4"><div class="rule b" style="--d:4"></div><div class="lab">Three views &nbsp;·&nbsp; L &nbsp;V&nbsp; E</div><div class="tabs"><button class="tab on" data-v="0">Logo</button><button class="tab" data-v="1">On the Van</button><button class="tab missing" data-v="2">Social End Card</button></div></div>
   </div>
-  <div class="frame r fs" style="--d:2"><div class="view lg on" data-cap="Pinwheel mark above the wordmark."><img src="assets/opt2-logo.png" alt="Option 02, Color logo"></div><div class="view " data-cap="Gray swirl graphic, side and rear."><img src="assets/opt2-van.jpg" alt="Option 02, On the van"></div><div class="view " data-cap="One color: white on black."><img src="assets/opt2-bw.jpg" alt="Option 02, Black & white"></div><span class="vtag">3 VIEWS</span></div>
+  <div class="frame r fs" style="--d:2"><div class="view on lg" data-cap="Pinwheel mark above the wordmark."><img src="assets/opt2-logo.png" alt="Option 02 logo"></div><div class="view van" data-cap="Gray swirl graphic, side and rear."><img src="assets/opt2-van.jpg" alt="Option 02 on the van"></div><div class="view miss" data-cap="No social end card was supplied for this option."><div class="ph"><span class="lab">Social end card</span><b>No end card supplied</b><span class="pl">Only Option 04 came with a social end card. None was supplied for this option.</span></div></div><span class="vtag">2 OF 3 SUPPLIED</span></div>
 </section>
 
 <!-- logo option 03 -->
-<section class="slide opt" id="opt3" data-notes="Option 03: wordmark with a swoosh line through it. On the van with blue and red swoosh stripes, side and rear. One color: white on black.">
+<section class="slide opt" id="opt3" data-default="0" data-notes="Option 03: wordmark with a swoosh line through it. On the van with blue and red swoosh stripes, side and rear. Social end card: none was supplied for this option.">
   <div class="left">
     <div class="stagek r" style="--d:0"><span class="num">03</span><span class="kick">Option 03 &nbsp;·&nbsp; Swoosh Wordmark</span></div>
     <h2 class="r" style="--d:1">Swoosh <span class="lw">Wordmark</span></h2>
     <div class="cap r" style="--d:2">Wordmark with a swoosh line through it.</div>
-    <div class="ctl r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Views of this option</div><div class="tabs"><button class="tab on" data-v="0">Color logo</button><button class="tab" data-v="1">On the van</button><button class="tab" data-v="2">Black &amp; white</button></div></div>
+    <div class="ctl r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Three views &nbsp;·&nbsp; L &nbsp;V&nbsp; E</div><div class="tabs"><button class="tab on" data-v="0">Logo</button><button class="tab" data-v="1">On the Van</button><button class="tab missing" data-v="2">Social End Card</button></div></div>
   </div>
-  <div class="frame r fs" style="--d:2"><div class="view lg on" data-cap="Wordmark with a swoosh line through it."><img src="assets/opt3-logo.png" alt="Option 03, Color logo"></div><div class="view " data-cap="Blue and red swoosh stripes, side and rear."><img src="assets/opt3-van.jpg" alt="Option 03, On the van"></div><div class="view " data-cap="One color: white on black."><img src="assets/opt3-bw.jpg" alt="Option 03, Black & white"></div><span class="vtag">3 VIEWS</span></div>
+  <div class="frame r fs" style="--d:2"><div class="view on lg" data-cap="Wordmark with a swoosh line through it."><img src="assets/opt3-logo.png" alt="Option 03 logo"></div><div class="view van" data-cap="Blue and red swoosh stripes, side and rear."><img src="assets/opt3-van.jpg" alt="Option 03 on the van"></div><div class="view miss" data-cap="No social end card was supplied for this option."><div class="ph"><span class="lab">Social end card</span><b>No end card supplied</b><span class="pl">Only Option 04 came with a social end card. None was supplied for this option.</span></div></div><span class="vtag">2 OF 3 SUPPLIED</span></div>
 </section>
 
 <!-- logo option 04 -->
-<section class="slide opt even" id="opt4" data-notes="Option 04: oval swoosh around the wordmark. With blue and red wave stripes, side and rear. One color, shown as the closing frame of an Instagram video.">
+<section class="slide opt even" id="opt4" data-default="0" data-notes="Option 04: oval swoosh around the wordmark. On the van with blue and red wave stripes, side and rear. Social end card: the logo in white on black, as the closing frame of a social video.">
   <div class="left">
     <div class="stagek r" style="--d:0"><span class="num b">04</span><span class="kick">Option 04 &nbsp;·&nbsp; Oval Swoosh</span></div>
     <h2 class="r" style="--d:1">Oval <span class="lw">Swoosh</span></h2>
     <div class="cap r" style="--d:2">Oval swoosh around the wordmark.</div>
-    <div class="ctl r" style="--d:4"><div class="rule b" style="--d:4"></div><div class="lab">Views of this option</div><div class="tabs"><button class="tab on" data-v="0">Color logo</button><button class="tab" data-v="1">On the van</button><button class="tab" data-v="2">Black &amp; white</button></div></div>
+    <div class="ctl r" style="--d:4"><div class="rule b" style="--d:4"></div><div class="lab">Three views &nbsp;·&nbsp; L &nbsp;V&nbsp; E</div><div class="tabs"><button class="tab on" data-v="0">Logo</button><button class="tab" data-v="1">On the Van</button><button class="tab" data-v="2">Social End Card</button></div></div>
   </div>
-  <div class="frame r fs" style="--d:2"><div class="view lg on" data-cap="Oval swoosh around the wordmark."><img src="assets/opt4-logo.png" alt="Option 04, Color logo"></div><div class="view " data-cap="Blue and red wave stripes, side and rear."><img src="assets/opt4-van.jpg" alt="Option 04, On the van"></div><div class="view " data-cap="One color, as the closing frame of an Instagram video."><img src="assets/opt4-bw.jpg" alt="Option 04, Black & white"></div><span class="vtag">3 VIEWS</span></div>
+  <div class="frame r fs" style="--d:2"><div class="view on lg" data-cap="Oval swoosh around the wordmark."><img src="assets/opt4-logo.png" alt="Option 04 logo"></div><div class="view van" data-cap="Blue and red wave stripes, side and rear."><img src="assets/opt4-van.jpg" alt="Option 04 on the van"></div><div class="view ec" data-cap="White on black, as the closing frame of a social video."><img src="assets/opt4-endcard.jpg" alt="Option 04 social video end card"><span class="ectag">END CARD · SOCIAL VIDEO</span></div><span class="vtag">3 OF 3 SUPPLIED</span></div>
 </section>
 
 <!-- logo option 05 -->
-<section class="slide opt" id="opt5" data-notes="Option 05: wordmark only, with diagonal red and navy stripes. No separate logo file was supplied, so it is shown on the van only.">
+<section class="slide opt" id="opt5" data-default="1" data-notes="Option 05: wordmark with diagonal red and navy stripes, shown on the van. No standalone logo file and no social end card were supplied for this option.">
   <div class="left">
     <div class="stagek r" style="--d:0"><span class="num">05</span><span class="kick">Option 05 &nbsp;·&nbsp; Stripe Wordmark</span></div>
     <h2 class="r" style="--d:1">Stripe <span class="lw">Wordmark</span></h2>
     <div class="cap r" style="--d:2">Wordmark with diagonal red and navy stripes, on the van.</div>
-    <div class="ctl r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Views of this option</div><div class="tabs"><button class="tab on" data-v="0">On the van</button></div></div>
+    <div class="ctl r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Three views &nbsp;·&nbsp; L &nbsp;V&nbsp; E</div><div class="tabs"><button class="tab missing" data-v="0">Logo</button><button class="tab on" data-v="1">On the Van</button><button class="tab missing" data-v="2">Social End Card</button></div></div>
   </div>
-  <div class="frame r fs" style="--d:2"><div class="view  on" data-cap="Wordmark with diagonal red and navy stripes, on the van."><img src="assets/opt5-van.jpg" alt="Option 05, On the van"></div><span class="vtag">1 VIEW</span></div>
+  <div class="frame r fs" style="--d:2"><div class="view miss" data-cap="No standalone logo file was supplied. The stripe wordmark exists only on the van."><div class="ph"><span class="lab">Logo</span><b>No logo file supplied</b><span class="pl">The stripe wordmark was only supplied on the van mockup.</span></div></div><div class="view on van" data-cap="Wordmark with diagonal red and navy stripes, on the van."><img src="assets/opt5-van.jpg" alt="Option 05 on the van"></div><div class="view miss" data-cap="No social end card was supplied for this option."><div class="ph"><span class="lab">Social end card</span><b>No end card supplied</b><span class="pl">Only Option 04 came with a social end card. None was supplied for this option.</span></div></div><span class="vtag">1 OF 3 SUPPLIED</span></div>
 </section>
 
 <!-- logo options: decision -->
@@ -638,7 +653,7 @@ body.static .s1 .ring,body.static .bigplay,body.static .rep svg{animation:none!i
 </section>
 
 <div id="notes"><b>SPEAKER NOTES</b><span></span></div>
-<div id="hint">← → navigate · type a number to jump · F fullscreen · O overview · N notes</div>
+<div id="hint">← → navigate · type a number to jump · L V E logo views · F fullscreen · O overview · N notes</div>
 <div id="count"><b>01</b> / <span id="tot">21</span></div>
 <div id="progress"><i></i></div>
 </div></div>
@@ -702,10 +717,14 @@ function setView(sec,k){
   const views=[...sec.querySelectorAll('.view')], tabs=[...sec.querySelectorAll('.tab')];
   if(!views[k]) return;
   views.forEach((v,j)=>v.classList.toggle('on',j===k)); tabs.forEach((t,j)=>t.classList.toggle('on',j===k));
-  const cap=sec.querySelector('.cap'); cap.style.opacity=0; setTimeout(()=>{cap.textContent=views[k].dataset.cap; cap.style.opacity='';},180);
+  setCap(sec, views[k].classList.contains('multi') ? (views[k].querySelector('.sub.on')||{}).dataset.cap : views[k].dataset.cap);
 }
+function setCap(sec,t){ const cap=sec.querySelector('.cap'); cap.style.opacity=0; setTimeout(()=>{cap.textContent=t; cap.style.opacity='';},180); }
+function setSub(sec,j){ const v=sec.querySelector('.view.multi'); if(!v) return; const subs=[...v.querySelectorAll('.sub')], imgs=[...v.querySelectorAll('.stack img')];
+  j=(j+subs.length)%subs.length; subs.forEach((b,x)=>b.classList.toggle('on',x===j)); imgs.forEach((im,x)=>im.classList.toggle('on',x===j)); if(v.classList.contains('on')) setCap(sec,subs[j].dataset.cap); }
 document.querySelectorAll('.opt').forEach(sec=>{
   sec.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',e=>{e.stopPropagation();setView(sec,+t.dataset.v);}));
+  sec.querySelectorAll('.sub').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();setSub(sec,+b.dataset.s);}));
 });
 /* ---- deck engine ---- */
 const stage=document.getElementById('stage');
@@ -731,7 +750,7 @@ function go(i,instant){
     s.classList.toggle('active',k===i);
     s.classList.toggle('before',k<i); s.classList.toggle('after',k>i);
   });
-  if(cur!==i && slides[i].classList.contains('opt')) setView(slides[i],0);
+  if(cur!==i && slides[i].classList.contains('opt')) { setView(slides[i],+(slides[i].dataset.default||0)); setSub(slides[i],0); }
   if(cur!==i){ const old=slides[cur].querySelector('#film iframe'); if(old){old.remove(); film.querySelector('.bigplay').style.display=''; film.querySelector('.ftag').style.display='';} }
   cur=i;
   countEl.textContent=String(i+1).padStart(2,'0');
@@ -770,10 +789,10 @@ addEventListener('keydown',e=>{
   else if(k==='Escape' && overview) toggleOverview(false);
   else if(k==='n'||k==='N') notes.classList.toggle('on');
   else if(/^[0-9]$/.test(k)){ numBuf+=k; clearTimeout(numT); const v=+numBuf; if(numBuf.length>=2||v*10>N){ if(v>=1) go(v-1); numBuf=''; } else numT=setTimeout(()=>{ if(v>=1) go(v-1); numBuf=''; },550); }
-  else if(slides[cur].classList.contains('opt') && /^[cvbCVB]$/.test(k)){ const sec=slides[cur], tabs=[...sec.querySelectorAll('.tab')];
-    const want={c:'color',v:'van',b:'black'}[k.toLowerCase()]; let idx=tabs.findIndex(t=>t.textContent.toLowerCase().includes(want));
-    const on=tabs.findIndex(t=>t.classList.contains('on')); if(want==='van'){ const vans=tabs.map((t,j)=>t.textContent.toLowerCase().includes('van')?j:-1).filter(j=>j>=0); idx=vans[(vans.indexOf(on)+1)%vans.length]; }
-    if(idx>=0) setView(sec,idx); }
+  else if(slides[cur].classList.contains('opt') && /^[lveLVE]$/.test(k)){ const sec=slides[cur], idx={l:0,v:1,e:2}[k.toLowerCase()];
+    const tabs=[...sec.querySelectorAll('.tab')], on=tabs.findIndex(t=>t.classList.contains('on'));
+    if(idx===1 && on===1 && sec.querySelector('.view.multi')){ const subs=[...sec.querySelectorAll('.sub')]; setSub(sec, subs.findIndex(b=>b.classList.contains('on'))+1); }
+    else setView(sec,idx); }
   else if(k==='Tab' && slides[cur].classList.contains('opt')){ e.preventDefault(); const sec=slides[cur], n=sec.querySelectorAll('.tab').length, on=[...sec.querySelectorAll('.tab')].findIndex(t=>t.classList.contains('on')); setView(sec,(on+(e.shiftKey?n-1:1))%n); }
   hint();
 });
@@ -793,6 +812,10 @@ addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches
 let hinted=false; function hint(){ if(!hinted){hinted=true; document.getElementById('hint').classList.add('gone');} }
 setTimeout(hint,6000);
 addEventListener('resize',fit); fit();
+/* keep the fixed stage pinned: focus or scrollIntoView must never scroll it */
+const pin=el=>el.addEventListener('scroll',()=>{ if(el.scrollTop||el.scrollLeft){ el.scrollTop=0; el.scrollLeft=0; } },{passive:true});
+[document.getElementById('viewport'),stage,...slides,...document.querySelectorAll('.frame')].forEach(pin);
+addEventListener('scroll',()=>{ if(scrollX||scrollY) scrollTo(0,0); },{passive:true});
 const h=parseInt(location.hash.slice(1),10);
 go(isNaN(h)?0:h-1);
 window.deck={go,N,toggleOverview};
