@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JEO Revamp — Yan Ortiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FAF5EC; --crimson:#C8102E; --blue:#1F4E79; --pale:#DCE6F0;
+  --line:1.5px; --ease:cubic-bezier(.22,.8,.2,1);
+  --font:'Poppins', 'Helvetica Neue', Arial, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#EFE6D6;overflow:hidden;font-family:var(--font);color:var(--crimson);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ---------- stage ---------- */
+#viewport{position:fixed;inset:0;display:grid;place-items:center;
+  background:radial-gradient(120% 90% at 50% 40%, #F4ECDF 0%, #E9DEC9 100%)}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:0 0;
+  background:var(--cream);overflow:hidden;box-shadow:0 30px 80px -30px rgba(80,40,20,.35),0 0 0 1px rgba(200,16,46,.06)}
+.slide{position:absolute;inset:0;padding:0 72px;opacity:0;visibility:hidden;
+  transition:opacity .9s var(--ease), transform 1.1s var(--ease), filter .9s var(--ease), visibility 0s linear .9s;
+  transform:scale(1.025);filter:blur(6px)}
+.slide.before{transform:scale(.985) translateX(-30px)}
+.slide.after{transform:scale(1.015) translateX(30px)}
+.slide.active{opacity:1;visibility:visible;transform:none;filter:none;transition-delay:0s}
+
+/* header strip */
+.hdr{position:absolute;left:72px;right:72px;top:0;height:58px;display:flex;align-items:center;justify-content:space-between;
+  font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(200,16,46,.22)}
+.hdr .c{color:var(--blue);font-weight:500;letter-spacing:.12em;text-transform:none;font-size:14px}
+.hdr .l{font-weight:800;letter-spacing:.3em}
+
+/* reveal */
+.r{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease), transform 1s var(--ease)}
+.active .r{opacity:1;transform:none;transition-delay:calc(var(--d,0) * 85ms + 280ms)}
+.r.fx{transform:translateX(-28px)} .r.fs{transform:scale(.94)}
+.active .r.fx,.active .r.fs{transform:none}
+
+/* type */
+.kick{font-size:15px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--blue)}
+h1,h2{font-weight:800;letter-spacing:-.02em;line-height:.98;color:var(--crimson)}
+h2{font-size:88px}
+h2 .lw,h1 .lw{color:var(--blue)}
+.sub{font-size:27px;font-weight:600;line-height:1.25;margin-top:16px}
+.body{font-size:21px;line-height:1.55;font-weight:400}
+.sm{font-size:17px;line-height:1.5}
+.lab{font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.blue{color:var(--blue)}
+
+/* components */
+.box{border:var(--line) solid var(--crimson);border-radius:22px;padding:22px 26px}
+.box.b{border-color:var(--blue)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:44px;padding:0 24px;border-radius:999px;
+  background:var(--crimson);color:var(--cream);font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.pill.b{background:var(--blue)} .pill.o{background:none;border:var(--line) solid var(--crimson);color:var(--crimson)}
+.pill.ob{background:none;border:var(--line) solid var(--blue);color:var(--blue)}
+.num{display:inline-flex;align-items:center;justify-content:center;height:32px;min-width:52px;padding:0 14px;border-radius:999px;
+  background:var(--crimson);color:var(--cream);font-size:15px;font-weight:700;letter-spacing:.06em}
+.num.b{background:var(--blue)}
+.st .num,.d .num{align-self:flex-start}
+.stagek{display:flex;align-items:center;gap:16px}
+.rule{height:2px;background:var(--crimson);width:100%;transform-origin:left;transform:scaleX(0);transition:transform 1.2s var(--ease)}
+.rule.b{background:var(--blue)}
+.active .rule{transform:scaleX(1);transition-delay:calc(var(--d,0) * 85ms + 380ms)}
+.img{position:absolute;overflow:hidden}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.08);transition:transform 9s cubic-bezier(.2,.6,.2,1)}
+.active .img img{transform:scale(1)}
+.abs{position:absolute}
+
+/* chrome */
+#progress{position:absolute;left:0;bottom:0;height:4px;width:100%;background:rgba(31,78,121,.12);z-index:20}
+#progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--crimson),var(--blue));transition:width .9s var(--ease)}
+#count{position:absolute;right:60px;bottom:14px;padding:6px 12px;border-radius:999px;background:rgba(250,245,236,.88);z-index:20;font-size:14px;font-weight:600;letter-spacing:.18em;color:var(--blue);font-variant-numeric:tabular-nums}
+#count b{color:var(--crimson);font-weight:800}
+#hint{position:absolute;left:72px;bottom:20px;z-index:20;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(31,78,121,.55);transition:opacity 1s}
+#hint.gone,body.static #hint{opacity:0}
+#notes{position:absolute;left:72px;right:72px;bottom:56px;z-index:30;background:rgba(31,78,121,.96);color:var(--cream);border-radius:18px;padding:18px 24px;font-size:17px;line-height:1.5;
+  transform:translateY(20px);opacity:0;pointer-events:none;transition:.4s var(--ease)}
+#notes.on{transform:none;opacity:1}
+#notes b{letter-spacing:.16em;font-size:12px;display:block;margin-bottom:4px;opacity:.8}
+
+/* overview */
+#stage.overview .slide{opacity:1;visibility:visible;filter:none;transition:transform .7s var(--ease), opacity .4s;cursor:pointer;
+  border-radius:14px;box-shadow:0 0 0 2px rgba(200,16,46,.15);overflow:hidden}
+#stage.overview .slide:hover{box-shadow:0 0 0 3px var(--blue)}
+#stage.overview .slide.active{box-shadow:0 0 0 4px var(--crimson)}
+#stage.overview .r,#stage.overview .rule{opacity:1;transform:none}
+#stage.overview #count,#stage.overview #hint{opacity:0}
+#stage.overview{background:#F3EBDD}
+
+/* modal */
+#modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(20,22,30,.72);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s}
+#modal.on{opacity:1;pointer-events:auto}
+#modal .card{background:var(--cream);border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:center;transform:translateY(20px) scale(.97);transition:.5s var(--ease);max-height:94vh}
+#modal.on .card{transform:none}
+#modal iframe{width:min(400px,86vw);height:min(720px,76vh);border:0;border-radius:14px;background:#fff}
+#modal .row{display:flex;gap:10px}
+#modal .msg{font-size:15px;color:var(--blue);max-width:380px;text-align:center}
+
+/* ---------- slide specific ---------- */
+/* 1 */
+.s1 .wrap{position:absolute;inset:58px 72px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.s1 h1{font-size:250px;font-weight:900;line-height:.86;letter-spacing:-.035em}
+.s1 h1>span{display:block}
+.s1 .tagline{font-size:22px;font-weight:500;margin-top:14px}
+.s1 .pres{margin-top:44px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.s1 .bar{width:64px;height:3px;background:var(--blue);border-radius:3px}
+.s1 .ring{position:absolute;border:1px solid rgba(200,16,46,.13);border-radius:50%;pointer-events:none}
+@keyframes drift{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.s1 .ring{left:50%;top:54%;animation:drift 80s linear infinite}
+.s1 .ring.b2{border-color:rgba(31,78,121,.12);border-style:dashed}
+
+/* 2 */
+.s2 .left{position:absolute;left:72px;top:118px;width:520px;display:flex;flex-direction:column;gap:22px}
+.s2 .left .box p{font-size:18px;line-height:1.5;margin-top:6px}
+.s2 .right{position:absolute;left:668px;top:118px;width:540px}
+.s2 .img{right:0;bottom:0;width:440px;height:430px;border-top-left-radius:200px}
+
+/* 3 */
+.s3 .top{position:absolute;left:0;right:0;top:120px;text-align:center}
+.s3 .row{position:absolute;left:72px;right:72px;top:390px;display:grid;grid-template-columns:repeat(7,1fr);gap:18px}
+.s3 .st{height:300px;display:flex;flex-direction:column;padding:22px 18px;border-radius:22px}
+.s3 .st .nm{font-size:21px;font-weight:800;line-height:1.15;margin-top:26px;letter-spacing:.04em}
+.s3 .st .tg{font-size:17px;line-height:1.4;margin-top:auto}
+.s3 .st.b{color:var(--blue)}
+.s3 .st.g{background:var(--crimson);color:var(--cream);border-color:var(--crimson);border-radius:80px 80px 22px 22px}
+.s3 .st.g .num{background:var(--cream);color:var(--crimson)}
+.s3 .track{position:absolute;left:72px;right:72px;top:368px;height:2px}
+
+/* 4 */
+.s4 .panel{left:0;top:58px;bottom:0;width:640px;background:var(--pale);border-top-right-radius:300px;display:grid;place-items:center}
+.s4 .panel img{width:470px;transform:translateY(20px)}
+.s4 .strip{position:absolute;left:720px;top:104px;right:72px}
+.s4 .strip .g{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}
+.s4 .strip .g img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;display:block;transition:transform .4s var(--ease)}
+.s4 .strip .g img:hover{transform:translateY(-4px) scale(1.04)}
+.s4 .txt{position:absolute;left:720px;top:345px;right:90px}
+
+/* 5 */
+.s5 .txt{position:absolute;left:72px;top:118px;width:820px}
+.s5 .cols{position:absolute;left:72px;top:620px;width:880px;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+.s5 .cols .lab{margin:16px 0 10px}
+.s5 .img{right:0;top:58px;bottom:0;width:560px;border-top-left-radius:280px}
+
+/* 6 */
+.s6 .browser{position:absolute;left:72px;top:104px;width:880px;height:470px;border:var(--line) solid var(--crimson);border-radius:22px;overflow:hidden;background:#fff8}
+.s6 .bbar{height:62px;display:flex;align-items:center;padding:0 22px;gap:8px;border-bottom:1px solid rgba(200,16,46,.25)}
+.s6 .dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--crimson)}
+.s6 .bbar img{height:26px;margin-left:22px}
+.s6 .nav{margin-left:auto;display:flex;gap:28px;font-size:12px;font-weight:600;letter-spacing:.16em;color:var(--blue)}
+.s6 .hero{position:absolute;left:22px;right:22px;top:80px;bottom:22px;border-radius:14px}
+.s6 .hero .ov{position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,245,236,.92) 0%,rgba(250,245,236,.6) 40%,rgba(250,245,236,0) 70%)}
+.s6 .hero .t{position:absolute;left:36px;top:110px;font-size:42px;font-weight:800;line-height:1.08}
+.s6 .hero .pill{position:absolute;left:36px;top:240px}
+.s6 .cap{position:absolute;left:72px;top:588px}
+.s6 .cols{position:absolute;left:72px;top:648px;width:880px;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+.s6 .cols .lab{margin:16px 0 10px}
+.s6 .txt{position:absolute;left:1020px;right:72px;bottom:110px}
+
+/* 7 */
+.s7 .txt{position:absolute;left:72px;top:110px;width:820px}
+.s7 .img{right:72px;top:104px;width:540px;height:330px;border-radius:22px}
+.s7 .boxes{position:absolute;left:72px;right:72px;top:500px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.s7 .boxes .box{height:140px}
+.s7 .boxes .box p{font-size:18px;margin-top:8px;line-height:1.4}
+.s7 .flow{position:absolute;left:72px;right:72px;top:700px;display:flex;align-items:center;justify-content:space-between}
+.s7 .flow .pill{width:300px;height:52px;font-size:15px}
+.s7 .chev{font-size:34px;font-weight:300;color:var(--blue)}
+
+/* 8 */
+.s8 .txt{position:absolute;left:72px;top:96px;width:820px}
+.s8 .pts{position:absolute;left:1000px;right:72px;top:110px;display:flex;flex-direction:column;gap:16px}
+.s8 .pts .p{font-size:19px;font-weight:600;padding-top:12px}
+.s8 .reels{position:absolute;left:72px;top:430px;display:flex;gap:22px}
+.reel{position:relative;width:210px;height:373px;border-radius:16px;overflow:hidden;display:block;transition:transform .5s var(--ease), box-shadow .5s var(--ease);
+  box-shadow:0 10px 30px -14px rgba(60,20,10,.45);background:#222}
+.reel img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--ease)}
+.reel:hover{transform:translateY(-8px);box-shadow:0 26px 50px -18px rgba(60,20,10,.55)}
+.reel:hover img{transform:scale(1.06)}
+.reel .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(10,10,20,.62) 100%)}
+.reel .play{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:rgba(250,245,236,.9);display:grid;place-items:center;transition:transform .4s var(--ease)}
+.reel:hover .play{transform:scale(1.12)}
+.reel .play:after{content:"";border-left:18px solid var(--crimson);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px}
+.reel .meta{position:absolute;left:16px;right:16px;bottom:14px;display:flex;justify-content:space-between;align-items:center;color:#fff;font-size:12px;font-weight:700;letter-spacing:.16em}
+.reel .ig{width:18px;height:18px}
+.s8 .side{position:absolute;left:1262px;right:72px;top:450px}
+.s8 .side .pill{margin-top:22px}
+.s8 .side .x{margin-top:14px;font-size:13px;color:var(--blue);line-height:1.5}
+
+/* 9 */
+.s9 .txt{position:absolute;left:72px;top:150px;width:470px}
+.s9 .frame{position:absolute;left:620px;top:170px;width:908px;height:511px}
+.s9 .back{position:absolute;left:28px;top:28px;width:100%;height:100%;background:var(--pale);border-radius:22px}
+.s9 .film{position:absolute;inset:0;border-radius:22px;overflow:hidden;background:#111;box-shadow:0 30px 60px -30px rgba(31,78,121,.6)}
+.s9 .film img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease), filter .6s}
+.s9 .film:hover img{transform:scale(1.03);filter:brightness(.92)}
+.s9 .film iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.s9 .bigplay{position:absolute;left:50%;top:50%;width:112px;height:112px;margin:-56px 0 0 -56px;border-radius:50%;background:var(--crimson);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(200,16,46,.5);animation:pulse 2.6s infinite}
+.s9 .bigplay:after{content:"";border-left:32px solid var(--cream);border-top:20px solid transparent;border-bottom:20px solid transparent;margin-left:8px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(200,16,46,.45)}70%{box-shadow:0 0 0 28px rgba(200,16,46,0)}100%{box-shadow:0 0 0 0 rgba(200,16,46,0)}}
+.s9 .ftag{position:absolute;left:24px;top:22px;background:rgba(250,245,236,.92);color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.18em;padding:8px 14px;border-radius:999px}
+.s9 .acts{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-top:40px}
+.s9 .url{font-size:15px;font-weight:500;color:var(--blue);border-bottom:1px solid rgba(31,78,121,.4)}
+
+/* 10 */
+.s10 .fun{position:absolute;left:72px;top:150px;width:600px;display:flex;flex-direction:column;gap:30px}
+.s10 .fun .box{padding:24px 30px}
+.s10 .fun .box p{font-size:19px;margin-top:4px}
+.s10 .fun .call{background:var(--crimson);color:var(--cream);border-radius:999px;padding:26px 40px}
+.s10 .txt{position:absolute;left:760px;right:72px;top:140px}
+
+/* 11 */
+.s11 .txt{position:absolute;left:72px;top:100px;width:1100px}
+.s11 .days{position:absolute;left:72px;right:72px;top:330px;display:grid;grid-template-columns:repeat(5,1fr) 1.25fr;gap:16px}
+.s11 .days .pill{height:50px;font-size:16px}
+.s11 .wk{position:absolute;left:72px;top:402px;width:1088px;height:120px}
+.s11 .sat{position:absolute;right:72px;top:402px;width:264px;height:120px;background:var(--crimson);color:var(--cream);border-radius:22px;padding:18px 24px}
+.s11 .sat b{font-size:24px;line-height:1.1;display:block;margin-top:6px}
+.s11 .notes{position:absolute;left:72px;right:72px;top:572px;display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+.s11 .notes .h{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+.s11 .notes .n{font-size:40px;font-weight:800;line-height:1}
+.s11 .rep{position:absolute;left:72px;top:770px;display:flex;align-items:center;gap:12px;font-size:17px;font-weight:600;color:var(--blue)}
+.s11 .rep svg{width:26px;height:26px;animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 12 */
+.s12 .logo{position:absolute;left:72px;top:104px;width:260px;height:160px;border:var(--line) solid var(--blue);border-radius:22px;display:grid;place-items:center;background:#fff6}
+.s12 .logo img{width:200px}
+.s12 .txt{position:absolute;left:72px;top:330px;width:860px}
+.s12 .q{font-size:29px;font-weight:700;line-height:1.38;margin-top:26px}
+.s12 .labs{position:absolute;left:72px;top:690px;width:860px;display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+.s12 .labs .lab{margin:14px 0 6px}
+.s12 .img{right:0;top:58px;bottom:0;width:560px;border-top-left-radius:280px}
+
+/* 13 */
+.s13 .top{position:absolute;left:0;right:0;top:118px;text-align:center}
+.s13 .top h2{font-size:104px}
+.s13 .row{position:absolute;left:72px;right:72px;top:380px;display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
+.s13 .d{height:380px;display:flex;flex-direction:column;padding:26px 24px}
+.s13 .d .lab{margin-top:24px;font-size:13px}
+.s13 .d .t{font-size:25px;font-weight:800;line-height:1.15;margin-top:8px}
+.s13 .d p{font-size:17px;line-height:1.5;margin-top:auto}
+.s13 .d.b{color:var(--blue)}
+.s13 .d.g{background:var(--crimson);color:var(--cream)}
+.s13 .d.g .num{background:var(--cream);color:var(--crimson)}
+
+/* 14 */
+.s14 .wrap{position:absolute;inset:58px 72px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.s14 h1{font-size:196px;font-weight:900;line-height:.88;letter-spacing:-.03em}
+.s14 h1>span{display:block;white-space:nowrap}
+.s14 .lg{width:210px;margin:30px 0 8px}
+.s14 .steps{display:flex;gap:20px;margin-top:16px}
+.s14 .steps .pill{height:54px;font-size:15px;letter-spacing:.08em;text-transform:none;padding:0 28px}
+.s14 .steps .pill b{font-weight:800;margin-right:6px}
+.s14 .foot{margin-top:34px}
+
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation:none!important}}
+body.static .slide,body.static .r,body.static .rule,body.static .img img{transition:none!important}
+body.static .s1 .ring,body.static .bigplay,body.static .rep svg{animation:none!important}
+
+@media print{
+  @page{size:1600px 900px;margin:0}
+  html,body{overflow:visible;background:var(--cream)}
+  #viewport{position:static;display:block}
+  #stage{position:relative;left:0;top:0;transform:none!important;overflow:visible;box-shadow:none;height:auto}
+  .slide{position:relative;width:1600px;height:900px;opacity:1;visibility:visible;transform:none;filter:none;page-break-after:always;overflow:hidden}
+  .r,.rule{opacity:1;transform:none} #progress,#count,#hint,#notes{display:none}
+}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- 1 -->
+<section class="slide s1" data-notes="Title. Presented by Yan Ortiz.">
+  <div class="ring" style="width:1080px;height:1080px"></div><div class="ring b2" style="width:820px;height:820px"></div>
+  <div class="wrap">
+    <div class="kick r" style="--d:0">A brand revamp for JEO HVAC &nbsp;·&nbsp; Heating &amp; Cooling</div>
+    <div class="tagline r" style="--d:1">Logo, vans, website, content, social, and ads — one brand, built step by step.</div>
+    <h1 style="margin-top:34px"><span class="r" style="--d:2">JEO</span><span class="lw r" style="--d:4">REVAMP</span></h1>
+    <div class="pres r" style="--d:6"><div class="bar"></div><div class="kick" style="font-size:13px">Presented by</div><div style="font-size:26px;font-weight:700">Yan Ortiz</div></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide s2" data-notes="Qualitative framing only; no market statistics are claimed.">
+  <div class="left">
+    <div class="box r fx" style="--d:1"><div class="lab">First impressions</div><p>Homeowners size up a company by its van, its website, and its feed before they ever call.</p></div>
+    <div class="box b r fx" style="--d:2;color:var(--blue)"><div class="lab">One look, everywhere</div><p>Logo, vans, site, and socials should read as one confident company.</p></div>
+    <div class="box r fx" style="--d:3"><div class="lab">Built to grow</div><p>A sharp, consistent brand gives every post and every ad more pull.</p></div>
+  </div>
+  <div class="right">
+    <div class="kick r" style="--d:0">Where JEO stands</div>
+    <h2 class="r" style="--d:1;margin-top:14px">Why <span class="lw">Now</span></h2>
+    <div class="sub r" style="--d:2">Great service deserves a brand that looks the part.</div>
+    <div class="r" style="--d:4;font-size:30px;font-weight:700;line-height:1.25;margin-top:44px;width:470px">Customers decide who to call in seconds.</div>
+    <p class="body r" style="--d:5;margin-top:18px;width:430px;font-size:19px">The revamp makes sure JEO wins those seconds — on the road, online, and in every feed.</p>
+  </div>
+  <div class="img r fs" style="--d:3"><img src="assets/gauge.jpg" alt=""></div>
+</section>
+
+<!-- 3 -->
+<section class="slide s3" data-notes="One slide overview of all seven stages. Stages 01-06 build the brand; 07 is the outcome: more leads.">
+  <div class="top">
+    <div class="kick r" style="--d:0">Seven stages &nbsp;·&nbsp; One brand</div>
+    <h2 class="r" style="--d:1;margin-top:16px;font-size:100px">The Full <span class="lw">Process</span></h2>
+  </div>
+  <div class="track"><div class="rule" style="--d:2;background:linear-gradient(90deg,var(--crimson),var(--blue),var(--crimson))"></div></div>
+  <div class="row">
+    <div class="st box r" style="--d:3"><span class="num">01</span><div class="nm">LOGO<br>REDESIGN</div><div class="tg">A mark built to last</div></div>
+    <div class="st box b r" style="--d:4"><span class="num b">02</span><div class="nm">VAN<br>DESIGN</div><div class="tg">Moving billboards</div></div>
+    <div class="st box r" style="--d:5"><span class="num">03</span><div class="nm">WEBSITE<br>REBUILD</div><div class="tg">Built to convert</div></div>
+    <div class="st box b r" style="--d:6"><span class="num b">04</span><div class="nm">CONTENT<br>CAPTURE</div><div class="tg">Shoot days on real jobs</div></div>
+    <div class="st box r" style="--d:7"><span class="num">05</span><div class="nm">SOCIAL<br>CONTENT</div><div class="tg">Steady posts &amp; reels</div></div>
+    <div class="st box b r" style="--d:8"><span class="num b">06</span><div class="nm">META<br>ADS</div><div class="tg">Paid reach, real leads</div></div>
+    <div class="st box g r" style="--d:9"><span class="num">07</span><div class="nm">GROW</div><div class="tg">More calls, more jobs</div></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide s4" data-notes="Logo shown: one of the color logo options already presented to JEO. The strip shows the black-and-white versions of the four options.">
+  <div class="img panel r fx" style="--d:0"><img src="assets/logo.png" alt="JEO HVAC logo" style="object-fit:contain;height:auto"></div>
+  <div class="strip">
+    <div class="lab blue r" style="--d:1">The options already presented</div>
+    <div class="g"><img class="r" style="--d:2" src="assets/logo-bw-1.jpg" alt="Option 1"><img class="r" style="--d:3" src="assets/logo-bw-2.jpg" alt="Option 2"><img class="r" style="--d:4" src="assets/logo-bw-3.jpg" alt="Option 3"><img class="r" style="--d:5" src="assets/logo-bw-4.jpg" alt="Option 4"></div>
+  </div>
+  <div class="txt">
+    <div class="stagek r" style="--d:3"><span class="num">01</span><span class="kick">Stage 01 &nbsp;·&nbsp; Logo redesign</span></div>
+    <h2 class="r" style="--d:4;margin-top:22px">Logo <span class="lw">Design</span></h2>
+    <div class="sub r" style="--d:5">A mark worth building on</div>
+    <p class="body r" style="--d:6;margin-top:22px">We start from the logo options already on the table and refine the strongest into a full identity: color, black-and-white, and every version the vans, site, and socials will use.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide s5" data-notes="Van design: a wrap that carries the new logo onto every street.">
+  <div class="txt">
+    <div class="stagek r" style="--d:0"><span class="num b">02</span><span class="kick">Stage 02 &nbsp;·&nbsp; Van design</span></div>
+    <h2 class="r" style="--d:1;margin-top:22px;font-size:96px">Van <span class="lw">Redesign</span></h2>
+    <div class="sub r" style="--d:2">Every van, a moving billboard</div>
+    <p class="body r" style="--d:3;margin-top:22px;width:640px">A bold wrap that carries the new logo onto every street, driveway, and job site.</p>
+  </div>
+  <div class="cols">
+    <div class="r" style="--d:4"><div class="rule b" style="--d:4"></div><div class="lab blue">Seen on every job</div><p class="sm">Parked out front, it tells the street who is on the job.</p></div>
+    <div class="r" style="--d:5"><div class="rule b" style="--d:5"></div><div class="lab blue">Recognized on sight</div><p class="sm">Same look as the site and the feed.</p></div>
+    <div class="r" style="--d:6"><div class="rule b" style="--d:6"></div><div class="lab blue">Always working</div><p class="sm">Advertising while driving and while parked.</p></div>
+  </div>
+  <div class="img r fs" style="--d:2"><img src="assets/copper.jpg" alt=""></div>
+</section>
+
+<!-- 6 -->
+<section class="slide s6" data-notes="Browser frame is a concept sketch of the direction, not the final site design.">
+  <div class="browser r fs" style="--d:0">
+    <div class="bbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><img src="assets/wordmark.png" alt="JEO HVAC"><div class="nav"><span>SERVICES</span><span>ABOUT</span><span>CONTACT</span></div></div>
+    <div class="img hero"><img src="assets/interior.jpg" alt=""><div class="ov"></div><div class="t">Heating &amp; cooling,<br>done right.</div><span class="pill">Call now</span></div>
+  </div>
+  <div class="cap lab blue r" style="--d:2">Concept sketch</div>
+  <div class="cols">
+    <div class="r" style="--d:3"><div class="rule b" style="--d:3"></div><div class="lab">Clean</div><p class="sm">Clear services, real photos, nothing in the way.</p></div>
+    <div class="r" style="--d:4"><div class="rule b" style="--d:4"></div><div class="lab">Fast</div><p class="sm">Loads quickly on the phone in a homeowner’s hand.</p></div>
+    <div class="r" style="--d:5"><div class="rule b" style="--d:5"></div><div class="lab">Built to convert</div><p class="sm">A call button on every screen, one tap away.</p></div>
+  </div>
+  <div class="txt">
+    <div class="stagek r" style="--d:2"><span class="num">03</span><span class="kick">Stage 03 &nbsp;·&nbsp; Website rebuild</span></div>
+    <h2 class="r" style="--d:3;margin-top:22px;font-size:84px">Website<br><span class="lw">Rebuild</span></h2>
+    <div class="sub r" style="--d:4">Built to turn visitors into calls</div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide s7" data-notes="Shoot list: jobs, team, vans, before/after. Footage feeds the website and social channels.">
+  <div class="txt">
+    <div class="stagek r" style="--d:0"><span class="num b">04</span><span class="kick">Stage 04 &nbsp;·&nbsp; Content capture</span></div>
+    <h2 class="r" style="--d:1;margin-top:20px">Content <span class="lw">Capture</span></h2>
+    <div class="sub r" style="--d:2">Shoot days that feed everything</div>
+    <p class="body r" style="--d:3;margin-top:16px;width:740px">Many shoot days through the revamp. Every frame goes into one library that powers the website and every social channel.</p>
+  </div>
+  <div class="img r fs" style="--d:2"><img src="assets/camera.jpg" alt=""></div>
+  <div class="boxes">
+    <div class="box r" style="--d:4"><div class="lab">Jobs</div><p>Real work on real sites</p></div>
+    <div class="box b r blue" style="--d:5"><div class="lab">Team</div><p>The people behind the name</p></div>
+    <div class="box r" style="--d:6"><div class="lab">Vans</div><p>The new fleet in motion</p></div>
+    <div class="box b r blue" style="--d:7"><div class="lab">Before / After</div><p>Proof of the work</p></div>
+  </div>
+  <div class="flow">
+    <span class="pill r" style="--d:8">Shoot days</span><span class="chev r" style="--d:9">›</span>
+    <span class="pill r" style="--d:10">One library</span><span class="chev r" style="--d:11">›</span>
+    <span class="pill r" style="--d:12">Website</span><span class="chev r" style="--d:13">›</span>
+    <span class="pill r" style="--d:14">Socials</span>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide s8" data-notes="Five reels that show the social media vision for JEO. Tap a cover to open it on Instagram, or the small Play here button to watch inside the deck.">
+  <div class="txt">
+    <div class="stagek r" style="--d:0"><span class="num">05</span><span class="kick">Stage 05 &nbsp;·&nbsp; Social content</span></div>
+    <h2 class="r" style="--d:1;margin-top:20px">Social <span class="lw">Content</span></h2>
+    <div class="sub r" style="--d:2">Consistent posts that build traction</div>
+    <p class="body r" style="--d:3;margin-top:14px;width:780px;font-size:19px">Steady posts and reels from our own shoot days, so JEO shows up in local feeds week after week.</p>
+  </div>
+  <div class="pts">
+    <div class="r" style="--d:2"><div class="rule" style="--d:2"></div><div class="p">Posts &amp; reels on a steady rhythm</div></div>
+    <div class="r blue" style="--d:3"><div class="rule b" style="--d:3"></div><div class="p">One look across every channel</div></div>
+    <div class="r" style="--d:4"><div class="rule" style="--d:4"></div><div class="p">Real jobs, real team, real proof</div></div>
+  </div>
+  <div class="reels" id="reels"></div>
+  <div class="side">
+    <div class="lab blue r" style="--d:9">The social vision</div>
+    <p class="sm r" style="--d:10;margin-top:10px">Five reels that show the social media vision for JEO.</p>
+    <a class="pill b r" style="--d:11" href="https://www.instagram.com/reel/DdQvPhGyaff/" target="_blank" rel="noopener">Tap a reel to watch</a>
+    <p class="x r" style="--d:12">Cover opens Instagram · ▶ plays here</p>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide s9" data-notes="The first piece from our shoot days. Click the poster to play the vidflow gallery inside the deck, or Watch the film to open it in a new tab.">
+  <div class="txt">
+    <div class="kick r" style="--d:0">From our shoot days</div>
+    <h2 class="r" style="--d:1;margin-top:18px;font-size:92px">Our First <span class="lw">Video</span></h2>
+    <p class="body r" style="--d:2;margin-top:24px">The first piece from our shoot days, made for JEO.</p>
+    <div class="acts r" style="--d:3">
+      <a class="pill" href="https://galleries.vidflow.co/ipclzrul" target="_blank" rel="noopener">Watch the film <span aria-hidden="true">↗</span></a>
+      <a class="url" href="https://galleries.vidflow.co/ipclzrul" target="_blank" rel="noopener">galleries.vidflow.co/ipclzrul</a>
+    </div>
+  </div>
+  <div class="frame r fs" style="--d:2">
+    <div class="back"></div>
+    <div class="film" id="film" role="button" tabindex="0" aria-label="Play the film here">
+      <img src="assets/film-poster.jpg" alt="First JEO video poster">
+      <span class="ftag">PLAY HERE</span>
+      <span class="bigplay"></span>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide s10" data-notes="Meta ads run on Facebook and Instagram. No results or budgets are claimed.">
+  <div class="fun">
+    <div class="box b r fx blue" style="--d:2;width:600px"><div class="lab">Reach</div><p>Local homeowners see JEO</p></div>
+    <div class="box b r fx blue" style="--d:3;width:540px;margin-left:30px"><div class="lab">Engage</div><p>Real content earns attention</p></div>
+    <div class="box r fx" style="--d:4;width:480px;margin-left:60px"><div class="lab">Click</div><p>They land on the new site</p></div>
+    <div class="call r fs" style="--d:5;width:420px;margin-left:90px"><div class="lab">Call</div><p style="font-size:19px;margin-top:4px">A new lead for JEO</p></div>
+  </div>
+  <div class="txt">
+    <div class="stagek r" style="--d:0"><span class="num b">06</span><span class="kick">Stage 06 &nbsp;·&nbsp; Meta ads</span></div>
+    <h2 class="r" style="--d:1;margin-top:22px">Meta <span class="lw">Ads</span></h2>
+    <div class="sub r" style="--d:2">Paid campaigns that bring in leads</div>
+    <p class="body r" style="--d:3;margin-top:22px">Facebook and Instagram ads built from our own content, aimed at local homeowners, and pointed at the new website. Every campaign works toward one thing: the phone ringing.</p>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide s11" data-notes="Weekly rhythm: Saturday shoot together with Yan assisting on site; weekdays Yan edits and builds; progress presented every Saturday.">
+  <div class="txt">
+    <div class="kick r" style="--d:0">How we’ll work together</div>
+    <h2 class="r" style="--d:1;margin-top:16px">Weekly <span class="lw">Schedule</span></h2>
+    <div class="sub r" style="--d:2">Every week, a visible step forward</div>
+  </div>
+  <div class="days">
+    <span class="pill ob r" style="--d:3">Mon</span><span class="pill ob r" style="--d:4">Tue</span><span class="pill ob r" style="--d:5">Wed</span><span class="pill ob r" style="--d:6">Thu</span><span class="pill ob r" style="--d:7">Fri</span><span class="pill r" style="--d:8">Sat</span>
+  </div>
+  <div class="wk box b r blue" style="--d:9"><div class="lab">Mon – Fri &nbsp;·&nbsp; I edit &amp; build</div><p style="font-size:21px;font-weight:600;margin-top:8px">Edit the footage, build the logo, vans, site, and ads.</p></div>
+  <div class="sat r fs" style="--d:10"><div class="lab">Together</div><b>Shoot +<br>review</b></div>
+  <div class="notes">
+    <div class="r" style="--d:11"><div class="h"><span class="n">01</span><span class="lab">Saturday · On site</span></div><div class="rule" style="--d:11"></div><p class="sm" style="margin-top:10px">We shoot together. I assist on site.</p></div>
+    <div class="r blue" style="--d:12"><div class="h"><span class="n">02</span><span class="lab">During the week</span></div><div class="rule b" style="--d:12"></div><p class="sm" style="margin-top:10px">I edit and build the other pieces.</p></div>
+    <div class="r" style="--d:13"><div class="h"><span class="n">03</span><span class="lab">Saturday · Review</span></div><div class="rule" style="--d:13"></div><p class="sm" style="margin-top:10px">I present the progress, so you see it move.</p></div>
+  </div>
+  <div class="rep r" style="--d:14"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>Repeats every week until the revamp is live</div>
+</section>
+
+<!-- 12 -->
+<section class="slide s12" data-notes="Yan documents the process during shoots to build working knowledge of the business.">
+  <div class="logo r fs" style="--d:0"><img src="assets/logo.png" alt="JEO HVAC logo"></div>
+  <div class="txt">
+    <h2 class="r" style="--d:1;font-size:84px">Learning As We <span class="lw">Go</span></h2>
+    <p class="q r" style="--d:2">On every shoot, I take notes on the whole process — so I know JEO inside out and can step in whenever I’m needed.</p>
+  </div>
+  <div class="labs">
+    <div class="r" style="--d:4"><div class="rule" style="--d:4"></div><div class="lab">Notes</div><p class="sm">From every shoot day</p></div>
+    <div class="r blue" style="--d:5"><div class="rule b" style="--d:5"></div><div class="lab">Knowledge</div><p class="sm">Of how JEO works</p></div>
+    <div class="r" style="--d:6"><div class="rule" style="--d:6"></div><div class="lab">Support</div><p class="sm">Whenever it’s needed</p></div>
+  </div>
+  <div class="img r fs" style="--d:2"><img src="assets/notebook.jpg" alt=""></div>
+</section>
+
+<!-- 13 -->
+<section class="slide s13" data-notes="Deliverables summarise the seven stages. Plus weekly Saturday shoots and progress reviews.">
+  <div class="top">
+    <div class="kick r" style="--d:0">The deliverables</div>
+    <h2 class="r" style="--d:1;margin-top:14px">What You <span class="lw">Get</span></h2>
+  </div>
+  <div class="row">
+    <div class="d box r" style="--d:2"><span class="num">01</span><div class="lab">Brand identity</div><div class="t">Refined logo</div><p>Color and black-and-white versions, ready for every use.</p></div>
+    <div class="d box b r" style="--d:3"><span class="num b">02</span><div class="lab">Van design</div><div class="t">Fleet wrap</div><p>A moving-billboard design for the JEO vans.</p></div>
+    <div class="d box r" style="--d:4"><span class="num">03</span><div class="lab">Website</div><div class="t">Rebuilt site</div><p>Clean, fast, and built to turn visitors into calls.</p></div>
+    <div class="d box b r" style="--d:5"><span class="num b">04</span><div class="lab">Content</div><div class="t">Photo &amp; video library</div><p>Shoot days on jobs, team, vans, and before/after.</p></div>
+    <div class="d box g r" style="--d:6"><span class="num">05</span><div class="lab">Growth</div><div class="t">Social + Meta ads</div><p>Consistent posts and reels, plus paid campaigns for leads.</p></div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="slide s14" data-notes="Close: next steps are proposals, no dates committed.">
+  <div class="wrap">
+    <h1><span class="r" style="--d:0">LET’S</span><span class="r" style="--d:2">BUILD <span class="lw">IT.</span></span></h1>
+    <img class="lg r fs" style="--d:4" src="assets/logo.png" alt="JEO HVAC logo">
+    <div class="kick r" style="--d:5">Next steps</div>
+    <div class="steps">
+      <span class="pill r" style="--d:6"><b>01</b> Lock the logo direction</span>
+      <span class="pill b r" style="--d:7"><b>02</b> Book our first Saturday shoot</span>
+      <span class="pill r" style="--d:8"><b>03</b> Start building, week by week</span>
+    </div>
+    <div class="lab foot r" style="--d:9">Yan Ortiz &nbsp;·&nbsp; Photo &amp; Video</div>
+  </div>
+</section>
+
+<div id="notes"><b>SPEAKER NOTES</b><span></span></div>
+<div id="hint">← → to navigate · F fullscreen · O overview · N notes</div>
+<div id="count"><b>01</b> / 14</div>
+<div id="progress"><i></i></div>
+</div></div>
+
+<div id="modal" aria-hidden="true"><div class="card">
+  <div id="mbody"></div>
+  <div class="row"><a id="mopen" class="pill b" target="_blank" rel="noopener">Open on Instagram ↗</a><button class="pill o" id="mclose">Close</button></div>
+</div></div>
+
+<script>
+(function(){
+const REELS=[
+ {id:'DdQvPhGyaff',img:'assets/reel-1.png'},
+ {id:'Db--6pEKmPx',img:'assets/reel-2.png'},
+ {id:'Dd8AGpxAJFm',img:'assets/reel-3.png'},
+ {id:'DcNgMCQtkmO',img:'assets/reel-4.png'},
+ {id:'DGTJWc3pSI7',img:'assets/reel-5.png'}];
+const FILM='https://galleries.vidflow.co/ipclzrul';
+const IG='<svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff"/></svg>';
+const reelsEl=document.getElementById('reels');
+REELS.forEach((r,i)=>{
+  const a=document.createElement('a');
+  a.className='reel r'; a.style.setProperty('--d',4+i);
+  a.href='https://www.instagram.com/reel/'+r.id+'/'; a.target='_blank'; a.rel='noopener';
+  a.setAttribute('aria-label','Open reel '+(i+1)+' on Instagram');
+  a.innerHTML='<img src="'+r.img+'" alt="Reel '+(i+1)+' cover" loading="eager"><span class="shade"></span><span class="play" title="Play here"></span><span class="meta"><span>REEL 0'+(i+1)+'</span>'+IG+'</span>';
+  a.querySelector('.play').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openReel(r.id);});
+  reelsEl.appendChild(a);
+});
+
+/* ---- modal: real IG embed, offline-graceful ---- */
+const modal=document.getElementById('modal'), mbody=document.getElementById('mbody'), mopen=document.getElementById('mopen');
+function openReel(id){
+  const url='https://www.instagram.com/reel/'+id+'/';
+  mopen.href=url;
+  if(!navigator.onLine){ mbody.innerHTML='<p class="msg">You are offline, so the reel can’t play inside the deck. Open it on Instagram when you are back online.</p>'; }
+  else{
+    mbody.innerHTML='<iframe src="'+url+'embed/" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy" title="Instagram reel"></iframe>';
+  }
+  modal.classList.add('on'); modal.setAttribute('aria-hidden','false');
+}
+function closeModal(){modal.classList.remove('on');modal.setAttribute('aria-hidden','true');setTimeout(()=>{mbody.innerHTML='';},400);}
+document.getElementById('mclose').onclick=closeModal;
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+
+/* ---- film: inline iframe attempt ---- */
+const film=document.getElementById('film');
+function playFilm(){
+  if(film.querySelector('iframe')) return;
+  if(!navigator.onLine){ window.open(FILM,'_blank','noopener'); return; }
+  const f=document.createElement('iframe');
+  f.src=FILM; f.allow='autoplay; fullscreen; picture-in-picture'; f.allowFullscreen=true; f.title='Our First Video — vidflow gallery';
+  film.appendChild(f);
+  film.querySelector('.bigplay').style.display='none'; film.querySelector('.ftag').style.display='none';
+}
+film.addEventListener('click',e=>{e.stopPropagation();playFilm();});
+film.addEventListener('keydown',e=>{if(e.key==='Enter'){playFilm();}});
+
+/* ---- deck engine ---- */
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const N=slides.length;
+slides.forEach(s=>{
+  const h=document.createElement('div'); h.className='hdr';
+  h.innerHTML='<span class="l">JEO</span><span class="c">One brand, built step by step</span><span>Brand Revamp</span>';
+  s.prepend(h);
+});
+const params=new URLSearchParams(location.search);
+if(params.has('static')) document.body.classList.add('static');
+let cur=0, overview=false;
+const countEl=document.querySelector('#count b'), bar=document.querySelector('#progress i'), notes=document.getElementById('notes');
+function fit(){
+  const s=Math.min(innerWidth/1600, innerHeight/900);
+  if(overview){ stage.style.transform='translate(-50%,-50%) scale('+s+')'; stage.style.transformOrigin='50% 50%'; }
+  else { stage.style.transformOrigin='50% 50%'; stage.style.transform='translate(-50%,-50%) scale('+s+')'; }
+}
+function go(i,instant){
+  i=Math.max(0,Math.min(N-1,i));
+  slides.forEach((s,k)=>{
+    s.classList.toggle('active',k===i);
+    s.classList.toggle('before',k<i); s.classList.toggle('after',k>i);
+  });
+  if(cur!==i){ const old=slides[cur].querySelector('#film iframe'); if(old){old.remove(); film.querySelector('.bigplay').style.display=''; film.querySelector('.ftag').style.display='';} }
+  cur=i;
+  countEl.textContent=String(i+1).padStart(2,'0');
+  bar.style.width=((i+1)/N*100)+'%';
+  notes.querySelector('span').textContent=slides[i].dataset.notes||'';
+  if(history.replaceState) history.replaceState(null,'','#'+(i+1));
+  if(overview) layoutOverview();
+}
+function layoutOverview(){
+  const cols=4, sc=.225, w=1600*sc, h=900*sc, gx=20, gy=16;
+  const rows=Math.ceil(N/cols), totalW=cols*w+(cols-1)*gx, totalH=rows*h+(rows-1)*gy;
+  const ox=(1600-totalW)/2, oy=(900-totalH)/2;
+  slides.forEach((s,k)=>{
+    const c=k%cols, r=Math.floor(k/cols);
+    s.style.transformOrigin='0 0';
+    s.style.transform='translate('+(ox+c*(w+gx))+'px,'+(oy+r*(h+gy))+'px) scale('+sc+')';
+  });
+}
+function toggleOverview(on){
+  overview = on===undefined ? !overview : on;
+  stage.classList.toggle('overview',overview);
+  if(overview) layoutOverview(); else slides.forEach(s=>{s.style.transform='';s.style.transformOrigin='';});
+}
+function next(){go(cur+1)} function prev(){go(cur-1)}
+function fs(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+addEventListener('keydown',e=>{
+  if(modal.classList.contains('on')){ if(e.key==='Escape') closeModal(); return; }
+  const k=e.key;
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){ if(k==='Enter'&&document.activeElement===film) return; e.preventDefault(); next(); }
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){ e.preventDefault(); prev(); }
+  else if(k==='Home') go(0); else if(k==='End') go(N-1);
+  else if(k==='f'||k==='F') fs();
+  else if(k==='o'||k==='O') toggleOverview();
+  else if(k==='Escape' && overview) toggleOverview(false);
+  else if(k==='n'||k==='N') notes.classList.toggle('on');
+  else if(/^[1-9]$/.test(k)) go(+k-1);
+  hint();
+});
+stage.addEventListener('click',e=>{
+  if(e.target.closest('a,button,[role=button]')) return;
+  if(overview){ const s=e.target.closest('.slide'); if(s){ go(slides.indexOf(s)); toggleOverview(false);} return; }
+  const r=stage.getBoundingClientRect();
+  (e.clientX-r.left) < r.width*0.3 ? prev() : next();
+  hint();
+});
+let sx=null, sy=null;
+addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) (dx<0?next:prev)(); sx=null; },{passive:true});
+let hinted=false; function hint(){ if(!hinted){hinted=true; document.getElementById('hint').classList.add('gone');} }
+setTimeout(hint,6000);
+addEventListener('resize',fit); fit();
+const h=parseInt(location.hash.slice(1),10);
+go(isNaN(h)?0:h-1);
+window.deck={go,N,toggleOverview};
+})();
+</script>
+</body>
+</html>
