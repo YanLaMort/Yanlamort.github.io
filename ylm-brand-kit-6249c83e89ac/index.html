@@ -151,6 +151,79 @@ html,body{height:100vh;height:100dvh}
 #fsbtn .ex{display:none}#fsbtn.on .en{display:none}#fsbtn.on .ex{display:block}#fsbtn.on{opacity:.3}
 #fsbtn[hidden],body.static #fsbtn{display:none}
 /* /v22 */
+/* ==== v23 portrait phone layout (only <=600px wide AND portrait; iPad / landscape / desktop untouched) ==== */
+@media (max-width:600px) and (orientation:portrait){
+  #stage{left:0!important;top:0!important;width:100%!important;height:100%!important;transform:none!important}
+  /* each slide fills the screen and scrolls inside itself when its content is taller */
+  .slide{display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none}
+  .slide::-webkit-scrollbar{display:none}
+  .slide.before{transform:translate3d(-24px,0,0) scale(.985)}.slide.after{transform:translate3d(24px,0,0) scale(1.012)}
+  .slide.t-title.before,.slide.t-title.after{transform:none}
+  .grain{position:sticky;top:0;flex:none;height:var(--vh,100%);margin-bottom:calc(-1 * var(--vh,100%));inset:auto;width:100%}
+  /* compact chrome: header on top, footer at the bottom of the content */
+  .meta,.foot{position:relative;left:auto;right:auto;top:auto;bottom:auto;flex:none;font-size:8px;letter-spacing:.2em;gap:10px;margin:0 16px}
+  .meta{padding-top:14px}
+  body.fsok .meta{margin-right:48px}
+  .foot{margin-top:auto;padding:20px 0 16px}
+  #hint,#count{display:none!important}
+  /* blocks flow vertically */
+  .slide .abs{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:auto!important;height:auto!important;margin:0 20px;flex:none}
+  .slide .display{font-size:13vw!important;line-height:1.08}
+  .tag{font-size:12px!important;letter-spacing:.22em!important;line-height:1.8!important;padding-left:.22em!important}
+  .tiny,.tiny.lab{font-size:12px!important;letter-spacing:.2em!important}
+  .cap{font-size:13px!important;letter-spacing:.1em!important}
+  /* section titles + deadline: centered, title scales to the width */
+  .slide .center-stage{flex:1 0 auto;margin:0;padding:0 22px}
+  .center-stage .display{font-size:15vw!important}
+  .slide[data-title="Deadline"] .display{font-size:21vw!important}
+  .rule{bottom:96px}
+  /* cover: the same wordmark, scaled to the phone width */
+  .t-cover > .abs{flex:1 0 auto;margin:0}
+  .t-cover > .abs > div{transform:scale(.5)!important}
+  /* photo grids: masonry columns, every photo at its own aspect ratio, slide scrolls */
+  .puzzle{position:relative!important;inset:auto!important;flex:none;margin:14px 10px 0;column-count:2;column-gap:6px}
+  .puzzle:has(.ptile:nth-child(25)){column-count:3;column-gap:5px}
+  .puzzle .ptile{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;display:block;break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 6px}
+  .puzzle:has(.ptile:nth-child(25)) .ptile{margin-bottom:5px}
+  .puzzle .ptile img{height:auto!important;object-fit:fill}
+  /* inspiration: title, album cover, then the 4 clips two per row */
+  .slide[data-title="Inspiration"] .abs:nth-of-type(4){display:block!important;margin:18px 20px 0}
+  .slide[data-title="Inspiration"] .abs:nth-of-type(4) img{max-width:64%!important;max-height:none!important;margin:0 auto}
+  .ytgrid{position:relative;left:auto;right:auto;top:auto;flex:none;margin:18px 20px 0;gap:14px 10px}
+  .ytgrid figcaption{font-size:12px;letter-spacing:.16em;margin-top:6px;line-height:1.4}
+  /* palette */
+  .slide[data-title="Palette"] .abs:nth-of-type(4){display:grid!important;grid-template-columns:1fr 1fr!important;gap:14px!important;margin-top:18px}
+  .sw .chip{flex:none;height:96px}
+  .sw .lab{font-size:11px;padding-top:8px}.sw .lab b{font-size:28px}
+  .slide[data-title="Palette"] .abs:nth-of-type(5){flex-direction:column;align-items:stretch!important;gap:22px!important;margin-top:26px}
+  .slide[data-title="Palette"] .abs:nth-of-type(5) > div:first-child{flex-wrap:wrap;gap:14px 18px!important}
+  .slide[data-title="Palette"] .abs:nth-of-type(5) > div:first-child > .tiny{flex-basis:100%}
+  .acc span{font-size:11px}.acc b{font-size:22px}.acc i{width:30px;height:30px}
+  /* music: big round buttons, bar on its own line */
+  .mplayer{position:relative;left:auto;right:auto;top:auto;flex:none;margin:22px 20px 0}
+  .mrow{display:grid;grid-template-columns:52px 1fr auto;grid-template-rows:auto auto;column-gap:16px;row-gap:2px;height:auto;padding:14px 2px}
+  .mbtn{grid-row:1 / span 2;width:52px;height:52px}
+  .mbtn::before{left:20px;top:16px}
+  .mrow.playing .mbtn::before{left:18px;top:17px}
+  .mname{grid-column:2;grid-row:1;width:auto;align-self:end}.mname .nsk{font-size:12px}.mname b{font-size:20px}
+  .mtime{grid-column:3;grid-row:1;width:auto;align-self:end;font-size:12px;letter-spacing:.12em}
+  .mbar{grid-column:2 / span 2;grid-row:2;height:30px}
+  /* next steps: vertical flow, the two parallel starts side by side */
+  .nsflow{position:relative;left:auto;top:auto;width:auto;height:auto;flex:none;margin:20px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+  .nsflow > *{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;grid-column:1 / -1}
+  .nslane-h{margin-bottom:10px;font-size:12px}
+  .nsflow > .nslane-h + .nscard{grid-column:1}.nsflow > .nslane-h + .nscard + .nscard{grid-column:2}
+  .nscard{padding:12px 14px;gap:4px}
+  .nscard b{font-size:13px;letter-spacing:.1em}.nscard em{font-size:12px;letter-spacing:.12em}.nscard .nsk{font-size:10px}
+  .nsbrace{display:none}
+  .nsline{justify-self:center;width:1px!important;height:22px!important;transform:scaleY(0);transform-origin:50% 0}
+  .active .nsline{transform:scaleY(1)}
+  .nsline::after{right:auto;left:-4px;top:auto;bottom:-1px;border-top:7px solid var(--silver);border-left:4.5px solid transparent;border-right:4.5px solid transparent;border-bottom:0}
+  .nsflow > .nsbar{margin-top:22px;height:2px!important}
+  .nsbar-l{margin-top:12px;left:auto;font-size:12px;letter-spacing:.2em;line-height:1.6}
+  .slide[data-title="Next Steps"] .abs:nth-last-of-type(2){flex-direction:column;gap:8px!important;margin-top:24px;padding-top:16px!important}
+}
+/* ==== /v23 ==== */
 </style>
 </head>
 <body>
@@ -788,7 +861,9 @@ const countEl=document.querySelector('#count b'), bar=document.querySelector('#p
     } else if(s.querySelector('.center-stage .display')) s.classList.add('t-title');
   });
 })();
+const phoneMQ=matchMedia('(max-width:600px) and (orientation:portrait)'); const phone=()=>phoneMQ.matches; /* v23 */
 function fit(){
+  stage.style.setProperty('--vh',(stage.clientHeight||innerHeight)+'px'); /* v23 */
   const vr=document.getElementById('viewport').getBoundingClientRect(); /* v22: safe-area box */
   const w=vr.width||(window.visualViewport&&visualViewport.width)||innerWidth, h=vr.height||(window.visualViewport&&visualViewport.height)||innerHeight;
   stage.style.transformOrigin='50% 50%'; stage.style.transform='translate(-50%,-50%) scale('+Math.min(w/1600,h/900)+')';
@@ -796,6 +871,7 @@ function fit(){
 function go(i){
   i=Math.max(0,Math.min(N-1,i));
   slides.forEach((s,k)=>{ s.classList.toggle('active',k===i); s.classList.toggle('before',k<i); s.classList.toggle('after',k>i); });
+  if(phone()&&slides[i]) slides[i].scrollTop=0; /* v23 */
   cur=i; countEl.textContent=String(i+1).padStart(2,'0'); bar.style.width=((i+1)/N*100)+'%';
   notes.querySelector('span').textContent=slides[i].dataset.notes||'';
   if(history.replaceState) history.replaceState(null,'','#'+(i+1));
@@ -809,6 +885,7 @@ function layoutOverview(){
     s.style.transform='translate('+(ox+c*(w+gx))+'px,'+(oy+r*(h+gy))+'px) scale('+sc+')'; });
 }
 function toggleOverview(on){
+  if(phone()&&!overview) return; /* v23 */
   overview = on===undefined ? !overview : on;
   stage.classList.toggle('overview',overview);
   if(overview) layoutOverview(); else slides.forEach(s=>{s.style.transform='';s.style.transformOrigin='';});
@@ -824,7 +901,7 @@ function fsEnter(){ if(!fsOK||isFS()) return; try{ const p=fsReq.call(de); if(p&
 function fs(){ if(!fsOK) return; if(isFS()){ try{ const p=fsExit.call(document); if(p&&p.catch) p.catch(()=>{}); }catch(_){} } else fsEnter(); }
 function fsUI(){ const on=isFS(); fsBtn.classList.toggle('on',on); fsBtn.setAttribute('aria-label',on?'Exit full screen':'Full screen'); fsBtn.title=on?'Exit full screen':'Full screen'; setTimeout(fit,60); setTimeout(fit,400); }
 ['fullscreenchange','webkitfullscreenchange'].forEach(t=>document.addEventListener(t,fsUI));
-if(fsOK&&!document.body.classList.contains('static')){ fsBtn.hidden=false;
+if(fsOK&&!document.body.classList.contains('static')){ fsBtn.hidden=false; document.body.classList.add('fsok');
   // the button never reaches deck navigation (tap/swipe/keys)
   ['click','touchstart','touchend','pointerdown','pointerup','mousedown','keydown'].forEach(t=>fsBtn.addEventListener(t,e=>e.stopPropagation()));
   fsBtn.addEventListener('click',e=>{ e.preventDefault(); fs(); fsBtn.blur(); });
@@ -852,14 +929,15 @@ stage.addEventListener('click',e=>{
   const r=stage.getBoundingClientRect();
   (e.clientX-r.left)<r.width*0.3 ? prev() : next(); hint();
 });
-addEventListener('touchstart',e=>{ if(e.touches.length===2){ toggleOverview(); sx=null; return; } sx=e.touches[0].clientX; },{passive:true});
-addEventListener('touchmove',e=>{ if(e.cancelable) e.preventDefault(); },{passive:false});
+let sy=0; addEventListener('touchstart',e=>{ if(e.touches.length===2){ toggleOverview(); sx=null; return; } sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+addEventListener('touchmove',e=>{ if(phone()&&e.target.closest&&e.target.closest('.slide.active')) return; /* v23 */ if(e.cancelable) e.preventDefault(); },{passive:false});
 addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx;
+  const dy=e.changedTouches[0].clientY-sy; if(phone()&&Math.abs(dy)>Math.abs(dx)*0.8){ sx=null; return; } /* v23 */
   if(Math.abs(dx)>50){ swiped=true; (dx<0?next:prev)(); hint(); setTimeout(()=>swiped=false,400);} sx=null; },{passive:true});
 document.addEventListener('gesturestart',e=>e.preventDefault());
 let hinted=false; function hint(){ if(!hinted){hinted=true; document.getElementById('hint').classList.add('gone');} }
 setTimeout(hint,6000);
-addEventListener('resize',fit); addEventListener('orientationchange',()=>setTimeout(fit,250));
+if(phoneMQ.addEventListener) phoneMQ.addEventListener('change',()=>{ if(phone()&&overview) toggleOverview(false); fit(); }); addEventListener('resize',fit); addEventListener('orientationchange',()=>setTimeout(fit,250));
 if(window.visualViewport) visualViewport.addEventListener('resize',fit);
 fit();
 const h=parseInt(location.hash.slice(1),10); go(isNaN(h)?0:h-1);
