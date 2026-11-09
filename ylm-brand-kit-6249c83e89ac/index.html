@@ -224,10 +224,89 @@ html,body{height:100vh;height:100dvh}
   .slide[data-title="Next Steps"] .abs:nth-last-of-type(2){flex-direction:column;gap:8px!important;margin-top:24px;padding-top:16px!important}
 }
 /* ==== /v23 ==== */
+/* ==== v24: cursive titles never clip their swashes ====
+   WebKit clips glyph ink that overhangs the element box while the element is a composited layer (opacity/transform/filter
+   transitions). Vivaldi swashes overhang up to ~0.14em right / 0.16em left, so give every cursive line room inside its own box;
+   matching negative margins keep the text exactly where it was. */
+.display,.t-cover .cv-by,.sw .lab b,.acc b{padding:.18em .32em .22em;margin-left:-.32em;margin-right:-.32em;margin-top:-.18em}
+.display{margin-bottom:-.22em}
+.t-cover .cv-by{margin-bottom:0;overflow:visible}
+.sw .lab b{margin-bottom:calc(2px - .22em)}
+.acc b{margin-bottom:-.22em}
+@media (max-width:600px) and (orientation:portrait){
+  /* header: below the status bar, with real air before each title */
+  .meta{padding-top:18px} /* #viewport is already inset by env(safe-area-inset-top) */
+  .meta + .abs{margin-top:40px}
+  /* a touch smaller everywhere (~10-15%) */
+  .slide .display{font-size:11.4vw!important}
+  .center-stage .display{font-size:13vw!important}
+  .slide[data-title="Deadline"] .display{font-size:18.5vw!important}
+  .tag{font-size:11px!important;letter-spacing:.2em!important}
+  .tiny,.tiny.lab{font-size:10.5px!important;letter-spacing:.24em!important}
+  .cap{font-size:11.5px!important}
+  .ytgrid figcaption{font-size:10.5px}
+  .mname .nsk{font-size:10.5px}.mname b{font-size:17px}.mtime{font-size:11px}
+  .nscard b{font-size:11.5px}.nscard em{font-size:10.5px}.nslane-h,.nsbar-l{font-size:10.5px}
+  /* palette, sectioned: Core colors / Accents / Usage */
+  .slide[data-title="Palette"] .abs:nth-of-type(4){margin-top:30px;row-gap:16px!important;column-gap:14px!important}
+  .slide[data-title="Palette"] .abs:nth-of-type(4)::before{content:'Core colors';grid-column:1 / -1;margin-bottom:-4px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--silver)}
+  .sw .chip{height:84px}
+  .sw .lab{padding-top:7px;font-size:10.5px;letter-spacing:.14em;line-height:1.3}
+  .sw .lab b{font-size:22px;line-height:1.05;margin-bottom:calc(1px - .22em)}
+  .slide[data-title="Palette"] .abs:nth-of-type(5){gap:0!important;margin-top:28px}
+  .slide[data-title="Palette"] .abs:nth-of-type(5) > div{border-top:1px solid #28282C;padding:20px 0 0}
+  .slide[data-title="Palette"] .abs:nth-of-type(5) > div + div{margin-top:24px}
+  .slide[data-title="Palette"] .abs:nth-of-type(5) > div:first-child{gap:12px 16px!important}
+  .slide[data-title="Palette"] .tiny.lab{margin:0 0 4px!important;opacity:.78}
+  .slide[data-title="Palette"] .abs:nth-of-type(5) > div:last-child .tiny.lab{margin-bottom:12px!important}
+  .acc{gap:9px}.acc i{width:26px;height:26px}.acc span{font-size:10.5px;line-height:1.3}.acc b{font-size:18px;line-height:1.05}
+}
+/* ==== /v24 ==== */
+/* ==== v24b: phone sectioning for dense text + one scrolling grid per section ==== */
+@media (max-width:600px) and (orientation:portrait){
+  .slide.ph-hide{display:none!important}
+  .ph-dup{display:none!important}
+  /* music intro: lead line, then two separated blocks, then a label above the player */
+  .slide[data-title="Music Rough Drafts"] .tag br{display:none}
+  .slide[data-title="Music Rough Drafts"] .tag .mi{display:block}
+  .slide[data-title="Music Rough Drafts"] .tag{margin-top:18px!important;line-height:1.65!important}
+  .slide[data-title="Music Rough Drafts"] .tag .mi1{font-size:12px;letter-spacing:.22em}
+  .slide[data-title="Music Rough Drafts"] .tag .mi2,.slide[data-title="Music Rough Drafts"] .tag .mi3{margin-top:14px;padding-top:14px;border-top:1px solid #28282C;font-size:10.5px}
+  .mplayer{margin-top:34px;border-bottom:1px solid #28282C}
+  .mplayer::before{content:'The drafts';display:block;margin-bottom:12px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--silver)}
+  .mrow{border-top-color:#28282C}
+  /* inspiration: title / credit / caption / cover / videos as separate blocks */
+  .slide[data-title="Inspiration"] .tiny.lab{margin-top:18px!important;line-height:1.75!important}
+  .slide[data-title="Inspiration"] .cap{margin-top:14px!important;padding-top:14px;border-top:1px solid #28282C}
+  .slide[data-title="Inspiration"] .abs:nth-of-type(4){margin-top:26px}
+  .ytgrid{margin-top:28px}
+  .ytgrid::before{content:'The videos';grid-column:1 / -1;margin-bottom:-4px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--silver)}
+  /* next steps: more air between the flow, the clothing line and the goal */
+  .nsflow{margin-top:26px}
+  .nsflow > .nsbar{margin-top:30px}
+  .slide[data-title="Next Steps"] .abs:nth-last-of-type(2){margin-top:30px;padding-top:20px!important;border-top-color:#28282C!important}
+  /* section titles + deadline: title, then each line as its own block */
+  .center-stage .tag{margin-top:24px!important}
+  .center-stage .tag br{display:none}
+  .center-stage .tag > span{display:block!important;margin-top:16px!important;padding-top:16px;border-top:1px solid #28282C}
+  .center-stage .tag + .tag{margin-top:18px!important}
+}
+/* ==== /v24b ==== */
+/* ==== v25 phone swipe hint ==== */
+#swipehint{display:none}
+@media (max-width:600px) and (orientation:portrait){
+  #swipehint{display:flex;position:fixed;z-index:40;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 46px);justify-content:center;align-items:center;gap:9px;pointer-events:none;
+    font-family:var(--meta);font-size:10px;font-weight:400;letter-spacing:.38em;text-transform:uppercase;color:#BCBCB9;opacity:.7;text-shadow:0 0 6px rgba(0,0,0,.85),0 1px 2px rgba(0,0,0,.6);transition:opacity .4s}
+  #swipehint::before{content:'';position:absolute;z-index:-1;left:50%;top:50%;width:190px;height:38px;margin:-19px 0 0 -95px;background:radial-gradient(closest-side,rgba(0,0,0,.5),rgba(0,0,0,0))}
+  #swipehint svg{width:9px;height:9px;overflow:visible;fill:none;stroke:#BCBCB9;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 2px rgba(0,0,0,.8))}
+  #swipehint.off,body.static #swipehint{opacity:0}
+}
+/* ==== /v25 ==== */
 </style>
 </head>
 <body>
 <button id="fsbtn" type="button" aria-label="Full screen" title="Full screen" hidden><svg class="en" viewBox="0 0 16 16"><path d="M1 5.5V1h4.5M10.5 1H15v4.5M15 10.5V15h-4.5M5.5 15H1v-4.5"/></svg><svg class="ex" viewBox="0 0 16 16"><path d="M5.5 1v4.5H1M15 5.5h-4.5V1M10.5 15v-4.5H15M1 10.5h4.5V15"/></svg></button>
+<div id="swipehint" aria-hidden="true"><span>Swipe</span><svg viewBox="0 0 9 9"><path d="M2.5 .5l4 4-4 4"/></svg></div>
 <div id="viewport"><div id="stage">
 <section class="slide" data-title="Cover" data-notes="Cover">
   <div class="grain"></div>
@@ -788,7 +867,7 @@ html,body{height:100vh;height:100dvh}
 <section class="slide" data-title="Music Rough Drafts" data-notes="Music Rough Drafts">
   <div class="grain"></div>
   <div class="meta"><span>YAN LA MORT D'UN JUSTE</span><span>2026</span><span>@FRAGILISM</span></div>
-  <div class="abs ns" style="--i:0;left:80px;top:96px"><div class="display" style="font-size:96px">Music Rough Drafts</div><p class="tag" style="margin-top:10px;line-height:1.9">Just finding my sound.<br><span style="color:var(--silver)">Raw mic sessions. Me on the mic, hearing myself back.</span><br>Not finished songs. No mix, no master. Just the starting point.</p></div>
+  <div class="abs ns" style="--i:0;left:80px;top:96px"><div class="display" style="font-size:96px">Music Rough Drafts</div><p class="tag" style="margin-top:10px;line-height:1.9"><span class="mi mi1">Just finding my sound.</span><br><span class="mi mi2" style="color:var(--silver)">Raw mic sessions. Me on the mic, hearing myself back.</span><br><span class="mi mi3">Not finished songs. No mix, no master. Just the starting point.</span></p></div>
   <div class="mplayer" data-base="media/" data-files="1">
     <div class="mrow ns" style="--i:1" data-id="01" data-dur="116"><button class="mbtn" aria-label="Play Draft 01"></button><div class="mname"><span class="nsk">Draft</span><b>01</b></div><div class="mbar"><i></i></div><div class="mtime"><span class="mel">0:00</span> / <span class="mtot">1:56</span></div></div>
     <div class="mrow ns" style="--i:2" data-id="02" data-dur="143"><button class="mbtn" aria-label="Play Draft 02"></button><div class="mname"><span class="nsk">Draft</span><b>02</b></div><div class="mbar"><i></i></div><div class="mtime"><span class="mel">0:00</span> / <span class="mtot">2:23</span></div></div>
@@ -862,6 +941,22 @@ const countEl=document.querySelector('#count b'), bar=document.querySelector('#p
   });
 })();
 const phoneMQ=matchMedia('(max-width:600px) and (orientation:portrait)'); const phone=()=>phoneMQ.matches; /* v23 */
+
+/* v24: phone portrait - one scrolling grid per section. Extra grid slides of a section hand their photos (deduped, in order)
+   to the section's first grid and are skipped by navigation, counter, progress and footer numbers. Undone off-phone. */
+const vis=()=>slides.filter(s=>!s.classList.contains('ph-hide')).map(s=>slides.indexOf(s));
+const moved=[];
+function renumber(){ const V=vis(); slides.forEach((s,k)=>{ const sp=s.querySelector('.foot span:nth-child(2)'); if(!sp) return;
+  if(!sp.dataset.n) sp.dataset.n=sp.textContent; const q=V.indexOf(k); sp.textContent=q<0?sp.dataset.n:String(q+1).padStart(2,'0'); });
+  document.getElementById('tot').textContent=String(V.length).padStart(2,'0'); }
+function phoneMerge(on){ if(on===phoneMerge.on) return; phoneMerge.on=on;
+  if(on){ slides.forEach((s,k)=>{ const pz=s.querySelector('.puzzle'), pr=slides[k-1]; if(!pz||!pr||pr.dataset.title!==s.dataset.title||!pr.querySelector('.puzzle')) return;
+      let host=pr; while(host.classList.contains('ph-hide')) host=slides[slides.indexOf(host)-1];
+      const hp=host.querySelector('.puzzle'), seen=new Set([...hp.querySelectorAll('.ptile:not(.ph-dup) img')].map(i=>i.getAttribute('src')));
+      [...pz.children].forEach(t=>{ const im=t.querySelector('img'), src=im&&im.getAttribute('src'); if(seen.has(src)) t.classList.add('ph-dup'); seen.add(src); moved.push([t,pz]); hp.appendChild(t); });
+      s.classList.add('ph-hide'); }); }
+  else { moved.splice(0).forEach(([t,pz])=>{ t.classList.remove('ph-dup'); pz.appendChild(t); }); slides.forEach(s=>s.classList.remove('ph-hide')); }
+  renumber(); }
 function fit(){
   stage.style.setProperty('--vh',(stage.clientHeight||innerHeight)+'px'); /* v23 */
   const vr=document.getElementById('viewport').getBoundingClientRect(); /* v22: safe-area box */
@@ -870,9 +965,10 @@ function fit(){
 }
 function go(i){
   i=Math.max(0,Math.min(N-1,i));
+  while(i>0&&slides[i].classList.contains('ph-hide')) i--; /* v24 */
   slides.forEach((s,k)=>{ s.classList.toggle('active',k===i); s.classList.toggle('before',k<i); s.classList.toggle('after',k>i); });
   if(phone()&&slides[i]) slides[i].scrollTop=0; /* v23 */
-  cur=i; countEl.textContent=String(i+1).padStart(2,'0'); bar.style.width=((i+1)/N*100)+'%';
+  cur=i; { const V=vis(), q=V.indexOf(i); countEl.textContent=String(q+1).padStart(2,'0'); bar.style.width=((q+1)/V.length*100)+'%'; const sh=document.getElementById('swipehint'); if(sh) sh.classList.toggle('off',!(i===0||slides[i].querySelector('.puzzle'))); /* v26: cover + photo grids only */ } /* v24, v25 hint */
   notes.querySelector('span').textContent=slides[i].dataset.notes||'';
   if(history.replaceState) history.replaceState(null,'','#'+(i+1));
   if(overview) layoutOverview();
@@ -890,7 +986,7 @@ function toggleOverview(on){
   stage.classList.toggle('overview',overview);
   if(overview) layoutOverview(); else slides.forEach(s=>{s.style.transform='';s.style.transformOrigin='';});
 }
-let navLock=0; function step(d){ const t=performance.now(); if(t<navLock||overview&&false) return; const j=Math.max(0,Math.min(N-1,cur+d)); if(j===cur) return; navLock=t+(matchMedia('(prefers-reduced-motion: reduce)').matches?300:620); go(j); }
+let navLock=0; function step(d){ const t=performance.now(); if(t<navLock||overview&&false) return; const V=vis(), j=V[Math.max(0,Math.min(V.length-1,V.indexOf(cur)+d))]; /* v24 */ if(j===cur) return; navLock=t+(matchMedia('(prefers-reduced-motion: reduce)').matches?300:620); go(j); }
 function next(){step(1)} function prev(){step(-1)}
 /* v22: full screen (standard API + webkit fallback for iPad Safari); the button only shows where element full screen is supported (not iPhone) */
 const de=document.documentElement, fsBtn=document.getElementById('fsbtn');
@@ -937,9 +1033,10 @@ addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches
 document.addEventListener('gesturestart',e=>e.preventDefault());
 let hinted=false; function hint(){ if(!hinted){hinted=true; document.getElementById('hint').classList.add('gone');} }
 setTimeout(hint,6000);
-if(phoneMQ.addEventListener) phoneMQ.addEventListener('change',()=>{ if(phone()&&overview) toggleOverview(false); fit(); }); addEventListener('resize',fit); addEventListener('orientationchange',()=>setTimeout(fit,250));
+if(phoneMQ.addEventListener) phoneMQ.addEventListener('change',()=>{ if(phone()&&overview) toggleOverview(false); phoneMerge(phone()); go(cur); fit(); }); addEventListener('resize',fit); addEventListener('orientationchange',()=>setTimeout(fit,250));
 if(window.visualViewport) visualViewport.addEventListener('resize',fit);
 fit();
+phoneMerge(phone()); /* v24 */
 const h=parseInt(location.hash.slice(1),10); go(isNaN(h)?0:h-1);
 window.deck={go,N,toggleOverview};
 })();
