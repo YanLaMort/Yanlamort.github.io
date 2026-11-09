@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#030203">
+<meta name="theme-color" content="#000000">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>YAN LA MORT — Personal Brand Kit · Internal</title>
 <link rel="preload" href="assets/fonts/Vivaldi.woff2" as="font" type="font/woff2" crossorigin>
@@ -142,9 +142,19 @@ body{-webkit-user-select:none;user-select:none}
 .ytgrid video::-webkit-media-controls,.ytgrid video::-webkit-media-controls-start-playback-button,.ytgrid video::-webkit-media-controls-overlay-play-button{display:none!important;-webkit-appearance:none;opacity:0}
 .ytgrid figcaption{margin-top:10px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--silver)}
 /* ==== /v19 ==== */
+/* v22: full-screen toggle + dvh/safe-area sizing */
+html,body{height:100vh;height:100dvh}
+#viewport{inset:auto;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);bottom:env(safe-area-inset-bottom,0px);left:env(safe-area-inset-left,0px)}
+#fsbtn{position:fixed;z-index:50;top:calc(env(safe-area-inset-top,0px) + 8px);right:calc(env(safe-area-inset-right,0px) + 8px);width:34px;height:34px;padding:9px;border:0;border-radius:6px;background:transparent;color:var(--steel);opacity:.5;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:opacity .3s}
+#fsbtn:hover,#fsbtn:focus-visible{opacity:.95;outline:none}
+#fsbtn svg{display:block;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4}
+#fsbtn .ex{display:none}#fsbtn.on .en{display:none}#fsbtn.on .ex{display:block}#fsbtn.on{opacity:.3}
+#fsbtn[hidden],body.static #fsbtn{display:none}
+/* /v22 */
 </style>
 </head>
 <body>
+<button id="fsbtn" type="button" aria-label="Full screen" title="Full screen" hidden><svg class="en" viewBox="0 0 16 16"><path d="M1 5.5V1h4.5M10.5 1H15v4.5M15 10.5V15h-4.5M5.5 15H1v-4.5"/></svg><svg class="ex" viewBox="0 0 16 16"><path d="M5.5 1v4.5H1M15 5.5h-4.5V1M10.5 15v-4.5H15M1 10.5h4.5V15"/></svg></button>
 <div id="viewport"><div id="stage">
 <section class="slide" data-title="Cover" data-notes="Cover">
   <div class="grain"></div>
@@ -751,7 +761,7 @@ body{-webkit-user-select:none;user-select:none}
 </section>
 
 <div id="notes"><b>SPEAKER NOTES</b><span></span></div>
-<div id="hint">← → or swipe · tap · F fullscreen · O overview · N notes</div>
+<div id="hint">← → or swipe · tap · O overview · N notes</div>
 <div id="count"><b>01</b> / <span id="tot">00</span></div>
 <div id="progress"><i></i></div>
 </div></div>
@@ -779,7 +789,8 @@ const countEl=document.querySelector('#count b'), bar=document.querySelector('#p
   });
 })();
 function fit(){
-  const w=(window.visualViewport&&visualViewport.width)||innerWidth, h=(window.visualViewport&&visualViewport.height)||innerHeight;
+  const vr=document.getElementById('viewport').getBoundingClientRect(); /* v22: safe-area box */
+  const w=vr.width||(window.visualViewport&&visualViewport.width)||innerWidth, h=vr.height||(window.visualViewport&&visualViewport.height)||innerHeight;
   stage.style.transformOrigin='50% 50%'; stage.style.transform='translate(-50%,-50%) scale('+Math.min(w/1600,h/900)+')';
 }
 function go(i){
@@ -804,9 +815,23 @@ function toggleOverview(on){
 }
 let navLock=0; function step(d){ const t=performance.now(); if(t<navLock||overview&&false) return; const j=Math.max(0,Math.min(N-1,cur+d)); if(j===cur) return; navLock=t+(matchMedia('(prefers-reduced-motion: reduce)').matches?300:620); go(j); }
 function next(){step(1)} function prev(){step(-1)}
-function fs(){ const d=document.documentElement;
-  if(!(document.fullscreenElement||document.webkitFullscreenElement)) (d.requestFullscreen||d.webkitRequestFullscreen||function(){}).call(d);
-  else (document.exitFullscreen||document.webkitExitFullscreen).call(document);
+/* v22: full screen (standard API + webkit fallback for iPad Safari); the button only shows where element full screen is supported (not iPhone) */
+const de=document.documentElement, fsBtn=document.getElementById('fsbtn');
+const fsReq=de.requestFullscreen||de.webkitRequestFullscreen, fsExit=document.exitFullscreen||document.webkitExitFullscreen;
+const fsOK=!!fsReq&&(('fullscreenEnabled' in document)?!!document.fullscreenEnabled:!!document.webkitFullscreenEnabled);
+const isFS=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+function fsEnter(){ if(!fsOK||isFS()) return; try{ const p=fsReq.call(de); if(p&&p.catch) p.catch(()=>{}); }catch(_){} }
+function fs(){ if(!fsOK) return; if(isFS()){ try{ const p=fsExit.call(document); if(p&&p.catch) p.catch(()=>{}); }catch(_){} } else fsEnter(); }
+function fsUI(){ const on=isFS(); fsBtn.classList.toggle('on',on); fsBtn.setAttribute('aria-label',on?'Exit full screen':'Full screen'); fsBtn.title=on?'Exit full screen':'Full screen'; setTimeout(fit,60); setTimeout(fit,400); }
+['fullscreenchange','webkitfullscreenchange'].forEach(t=>document.addEventListener(t,fsUI));
+if(fsOK&&!document.body.classList.contains('static')){ fsBtn.hidden=false;
+  // the button never reaches deck navigation (tap/swipe/keys)
+  ['click','touchstart','touchend','pointerdown','pointerup','mousedown','keydown'].forEach(t=>fsBtn.addEventListener(t,e=>e.stopPropagation()));
+  fsBtn.addEventListener('click',e=>{ e.preventDefault(); fs(); fsBtn.blur(); });
+  // first tap or keypress anywhere also asks for full screen (once; if Yan exits, it stays exited). Capture phase, no preventDefault, so nav/music/video handlers still run.
+  let first=true; const firstGo=e=>{ if(!first) return; if(e.target&&e.target.closest&&e.target.closest('#fsbtn')) return; first=false; fsEnter();
+    ['touchend','click','keydown'].forEach(t=>removeEventListener(t,firstGo,true)); };
+  ['touchend','click','keydown'].forEach(t=>addEventListener(t,firstGo,true));
 }
 addEventListener('keydown',e=>{
   const k=e.key;
