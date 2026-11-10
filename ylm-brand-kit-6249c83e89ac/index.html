@@ -302,6 +302,55 @@ html,body{height:100vh;height:100dvh}
   #swipehint.off,body.static #swipehint{opacity:0}
 }
 /* ==== /v25 ==== */
+/* ==== v27 next steps: 10-step vertical pipeline (same card / label / arrow language as v15), scrolls inside the slide ==== */
+.nsscroll{position:absolute;left:0;right:0;top:52px;bottom:46px;z-index:3;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 26px,#000 calc(100% - 48px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 26px,#000 calc(100% - 48px),transparent 100%)}
+.nsscroll::-webkit-scrollbar{display:none}
+.nsin{padding:44px 80px 70px}
+.nsf{position:relative;margin-top:44px;padding-left:58px}
+.nsrail{position:absolute;left:0;top:7px;bottom:0;width:2px;background:#1c1c1f}
+.nsrail i{display:block;width:100%;height:100%;background:var(--silver);transform:scaleY(0);transform-origin:50% 0;transition:transform .3s ease}
+.nsrail::before{content:'';position:absolute;left:-3px;top:-3px;width:8px;height:8px;border-radius:50%;background:#BB0B15;opacity:0;transition:opacity .3s}
+.active .nsrail i{transform:scaleY(1);transition:transform 2.2s var(--cine) .45s}
+.active .nsrail::before{opacity:1;transition:opacity .5s ease .4s}
+.nsrail-l{font-size:11px;letter-spacing:.3em;text-transform:uppercase;line-height:1.5;margin-bottom:30px}
+.nsrail-l em{display:block;font-style:normal;margin-top:6px;font-size:11px;letter-spacing:.16em;line-height:1.6;max-width:980px}
+.nsera{font-size:10px;letter-spacing:.34em;text-transform:uppercase;margin:0 0 14px;opacity:.7}
+.nslane{font-size:10px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px}
+.nspar{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.nsc{border:1px solid #3a3a3e;padding:18px 22px;display:flex;flex-direction:column;gap:6px;background:#060607}
+.nsc .nsk{font-size:10px;letter-spacing:.3em;text-transform:uppercase}
+.nsc b{font-weight:400;font-size:17px;line-height:1.35;letter-spacing:.12em;text-transform:uppercase}
+.nsc em{font-style:normal;font-size:12.5px;line-height:1.65;letter-spacing:.1em;text-transform:uppercase;max-width:1040px}
+.nsc em.nsem{border-top:1px solid #2a2a2e;padding-top:9px;margin-top:4px}
+.nsc.nsfin{border-color:var(--silver)}
+.nsarr{position:relative;width:1px;height:30px;margin:0 auto;background:var(--silver);transform:scaleY(0);transform-origin:50% 0;transition:transform .3s ease}
+.nsarr::after{content:'';position:absolute;left:-4px;bottom:-1px;border-top:7px solid var(--silver);border-left:4.5px solid transparent;border-right:4.5px solid transparent}
+.active .nsarr{transform:scaleY(1);transition:transform .45s var(--cine) calc(var(--i)*130ms + 150ms)}
+.nsarr + .nsera{margin-top:16px}
+.nsgoal{margin-top:48px;display:flex;align-items:baseline;gap:22px;border-top:1px solid #222;padding-top:22px}
+.nsgoal .cap{font-size:14px;letter-spacing:.12em}
+.nsgoal .tiny.lab{min-width:96px}
+.nsgoal.nsvision{margin-top:22px;border-top-color:#1a1a1d}
+@media (prefers-reduced-motion:reduce){.nsarr,.nsrail i{transform:none!important;transition:none!important}}
+@media (max-width:600px) and (orientation:portrait){
+  .nsscroll{position:relative;left:auto;right:auto;top:auto;bottom:auto;flex:none;overflow:visible;-webkit-mask-image:none;mask-image:none}
+  .nsin{padding:40px 20px 0}
+  .nsf{margin-top:24px;padding-left:18px}
+  .nsrail-l{font-size:10.5px;letter-spacing:.22em;margin-bottom:22px}
+  .nsrail-l em{font-size:10px;letter-spacing:.1em}
+  .nsera,.nslane{font-size:10px;letter-spacing:.24em}
+  .nspar{gap:8px}
+  .nsc{padding:12px 14px;gap:4px}
+  .nsc b{font-size:11.5px;letter-spacing:.1em}
+  .nsc em{font-size:10.5px;letter-spacing:.06em;line-height:1.6}
+  .nsc .nsk{font-size:10px}
+  .nsarr{height:22px}
+  .nsgoal{flex-direction:column;gap:8px;margin-top:30px;padding-top:20px;border-top-color:#28282C}
+  .nsgoal .cap{font-size:11.5px!important;letter-spacing:.08em!important}
+  .nsgoal.nsvision{margin-top:18px}
+}
+/* ==== /v27 ==== */
 </style>
 </head>
 <body>
@@ -880,26 +929,44 @@ html,body{height:100vh;height:100dvh}
 <section class="slide" data-title="Next Steps" data-notes="Next Steps">
   <div class="grain"></div>
   <div class="meta"><span>YAN LA MORT D'UN JUSTE</span><span>2026</span><span>@FRAGILISM</span></div>
-  <div class="abs ns" style="--i:0;left:80px;top:96px"><div class="display" style="font-size:96px">Next Steps</div></div>
-  <div class="nsflow">
-    <div class="nslane-h ns" style="--i:1">01 · In parallel</div>
-    <div class="nscard ns" style="--i:1;left:0;top:34px;width:300px;height:112px"><span class="nsk">Music</span><b>Create 50 songs</b></div>
-    <div class="nscard ns" style="--i:1.5;left:0;top:166px;width:300px;height:112px"><span class="nsk">Fragilism</span><b>Pick the clothes we make for YAN</b></div>
-    <div class="nsbrace ns" style="--i:2;left:300px;top:90px;height:132px"></div>
-    <div class="nsline" style="--i:2;left:328px;top:156px;width:48px"></div>
-    <div class="nscard ns" style="--i:2.5;left:376px;top:100px;width:220px;height:112px"><span class="nsk">02</span><b>Choose the song</b><em>for the music video</em></div>
-    <div class="nsline" style="--i:3;left:596px;top:156px;width:48px"></div>
-    <div class="nscard ns" style="--i:3.5;left:644px;top:100px;width:220px;height:112px"><span class="nsk">03</span><b>Make the music video</b></div>
-    <div class="nsline" style="--i:4;left:864px;top:156px;width:48px"></div>
-    <div class="nscard ns" style="--i:4.5;left:912px;top:70px;width:236px;height:172px"><span class="nsk">04</span><b>Promote it</b><em>Temperamento · Meta ads · more</em><em class="nsem">Big push to the Christian hip hop community</em></div>
-    <div class="nsline" style="--i:5;left:1148px;top:156px;width:48px"></div>
-    <div class="nscard ns nsfin" style="--i:5.5;left:1196px;top:100px;width:244px;height:112px"><span class="nsk">05</span><b>Lock in a performance</b><em>Open for headliners · NY concerts</em></div>
-    <div class="nsbar" style="--i:6;top:318px"><i></i></div>
-    <div class="nsbar-l ns" style="--i:6.5;top:332px">Fragilism clothing · promoted throughout</div>
+  <div class="nsscroll"><div class="nsin">
+  <div class="ns" style="--i:0"><div class="display" style="font-size:96px">Next Steps</div></div>
+  <div class="nsf">
+    <div class="nsrail"><i></i></div>
+    <div class="nsrail-l ns" style="--i:1">Fragilism clothing · runs throughout<em>Integrated into the music videos, editorials, promo campaigns, performances and artist collaborations</em></div>
+    <div class="nsera ns" style="--i:1.5">YAN · the proof of concept</div>
+    <div class="nslane ns" style="--i:2">01 · In parallel</div>
+    <div class="nspar">
+      <div class="nsc ns" style="--i:2"><span class="nsk">Music</span><b>Create 50 songs</b><em>Establish YAN’s sound and narrow down the strongest 3–5 tracks.</em></div>
+      <div class="nsc ns" style="--i:2.5"><span class="nsk">Fragilism</span><b>Develop YAN’s visual identity</b><em>Select the clothing we’ll create and establish the styling and creative direction.</em></div>
+    </div>
+    <div class="nsarr" style="--i:3"></div>
+    <div class="nsc ns" style="--i:3"><span class="nsk">02</span><b>Select the lead single</b><em>Choose the strongest song for the first music video. Develop the visual concept, storyline and overall campaign direction.</em></div>
+    <div class="nsarr" style="--i:3.5"></div>
+    <div class="nsc ns" style="--i:3.5"><span class="nsk">03</span><b>Create the content</b><em>Produce the official music video, fashion editorials, promotional photography, behind-the-scenes footage, interviews and short-form content.</em></div>
+    <div class="nsarr" style="--i:4"></div>
+    <div class="nsc ns" style="--i:4"><span class="nsk">04</span><b>Build anticipation</b><em>Start promoting before the release. Publish teasers, document the creative journey, introduce the Fragilism team, and build an audience through pre-saves and social media.</em></div>
+    <div class="nsarr" style="--i:4.5"></div>
+    <div class="nsc ns" style="--i:4.5"><span class="nsk">05</span><b>Official release</b><em>Launch the single, music video and Fragilism fashion campaign together. Introduce the clothing capsule or waitlist.</em></div>
+    <div class="nsarr" style="--i:5"></div>
+    <div class="nsc ns" style="--i:5"><span class="nsk">06</span><b>Promote the release</b><em>Execute a major promotional campaign targeting the Christian hip-hop community.</em><em class="nsem">Temperamento collaborations · Meta and YouTube advertising · Playlist pitching · Christian influencers and content creators · Music blogs and media outreach · Clothing placements with relevant artists</em></div>
+    <div class="nsarr" style="--i:5.5"></div>
+    <div class="nsc ns" style="--i:5.5"><span class="nsk">07</span><b>Extend the momentum</b><em>Continue releasing performance videos, behind-the-scenes episodes, interviews, director’s cuts and fashion content. Retarget audiences who engaged with the original campaign.</em></div>
+    <div class="nsarr" style="--i:6"></div>
+    <div class="nsc ns" style="--i:6"><span class="nsk">08</span><b>Secure live performances</b><em>Book YAN as an opening act for established Christian artists. Target New York, Atlanta and other relevant markets. Explore listening parties, pop-ups and live fashion activations.</em></div>
+    <div class="nsarr" style="--i:6.5"></div>
+    <div class="nsc ns" style="--i:6.5"><span class="nsk">09</span><b>Build the case study</b><em>Document the results of the entire campaign: music streams, engagement, audience growth, clothing sales and promotional performance.</em><em class="nsem">Use this campaign as proof of what Fragilism can accomplish for an artist.</em></div>
+    <div class="nsarr" style="--i:7"></div>
+    <div class="nsera ns" style="--i:7">Fragilism · the long-term company</div>
+    <div class="nsc ns nsfin" style="--i:7"><span class="nsk">10</span><b>Expand to other artists</b><em>Position Fragilism as a creative partner for Christian artists, offering complete creative direction, styling, fashion, music video production and promotional campaigns.</em><em class="nsem">Use YAN as the first successful case study to attract future collaborations.</em></div>
   </div>
-  <div class="abs ns" style="--i:7;left:80px;right:80px;top:712px;display:flex;align-items:baseline;gap:22px;border-top:1px solid #222;padding-top:22px">
+  <div class="nsgoal ns" style="--i:7.5">
     <div class="tiny lab" style="margin:0;white-space:nowrap">The goal</div>
-    <p class="cap" style="font-size:14px;letter-spacing:.12em">Show an artist what an EP run looks like with Fragilism as creative directors and stylists, all for the glory of God.</p></div>
+    <p class="cap">Use YAN as the first artist to demonstrate what a complete creative era looks like with Fragilism leading the creative direction, fashion, filmmaking, and promotional strategy. Build a repeatable model that allows Fragilism to collaborate with Christian artists, elevate their artistry, and glorify God through our creative work.</p></div>
+  <div class="nsgoal nsvision ns" style="--i:8">
+    <div class="tiny lab" style="margin:0;white-space:nowrap">The vision</div>
+    <p class="cap">Record labels with Christian artists hiring the Fragilism team to give their artists a complete, high-quality creative makeover.</p></div>
+</div></div>
   <div class="foot"><span>NOVEMBER 2026</span><span>23</span><span>INTERNAL DOCUMENT</span></div>
 </section>
 
@@ -968,6 +1035,7 @@ function go(i){
   while(i>0&&slides[i].classList.contains('ph-hide')) i--; /* v24 */
   slides.forEach((s,k)=>{ s.classList.toggle('active',k===i); s.classList.toggle('before',k<i); s.classList.toggle('after',k>i); });
   if(phone()&&slides[i]) slides[i].scrollTop=0; /* v23 */
+  { const ns=slides[i].querySelector('.nsscroll'); if(ns) ns.scrollTop=0; } /* v27 */
   cur=i; { const V=vis(), q=V.indexOf(i); countEl.textContent=String(q+1).padStart(2,'0'); bar.style.width=((q+1)/V.length*100)+'%'; const sh=document.getElementById('swipehint'); if(sh) sh.classList.toggle('off',!(i===0||slides[i].querySelector('.puzzle'))); /* v26: cover + photo grids only */ } /* v24, v25 hint */
   notes.querySelector('span').textContent=slides[i].dataset.notes||'';
   if(history.replaceState) history.replaceState(null,'','#'+(i+1));
@@ -1008,6 +1076,8 @@ if(fsOK&&!document.body.classList.contains('static')){ fsBtn.hidden=false; docum
 }
 addEventListener('keydown',e=>{
   const k=e.key;
+  if((k==='ArrowDown'||k==='ArrowUp')&&!phone()){ const sc=slides[cur].querySelector('.nsscroll'); /* v27: arrows scroll the pipeline first */
+    if(sc){ const d=k==='ArrowDown'?1:-1; if(d>0?sc.scrollTop+sc.clientHeight<sc.scrollHeight-2:sc.scrollTop>0){ e.preventDefault(); const y0=sc.scrollTop, y1=Math.max(0,Math.min(sc.scrollHeight-sc.clientHeight,y0+d*320)), t0=performance.now(); (function tw(t){ const f=Math.min(1,(t-t0)/320); sc.scrollTop=y0+(y1-y0)*(1-Math.pow(1-f,3)); if(f<1) requestAnimationFrame(tw); })(t0); return; } } }
   if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){ e.preventDefault(); next(); }
   else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){ e.preventDefault(); prev(); }
   else if(k==='Home') go(0); else if(k==='End') go(N-1);
@@ -1026,9 +1096,9 @@ stage.addEventListener('click',e=>{
   (e.clientX-r.left)<r.width*0.3 ? prev() : next(); hint();
 });
 let sy=0; addEventListener('touchstart',e=>{ if(e.touches.length===2){ toggleOverview(); sx=null; return; } sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
-addEventListener('touchmove',e=>{ if(phone()&&e.target.closest&&e.target.closest('.slide.active')) return; /* v23 */ if(e.cancelable) e.preventDefault(); },{passive:false});
+addEventListener('touchmove',e=>{ if(phone()&&e.target.closest&&e.target.closest('.slide.active')) return; /* v23 */ if(e.target.closest&&e.target.closest('.slide.active .nsscroll')) return; /* v27 */ if(e.cancelable) e.preventDefault(); },{passive:false});
 addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx;
-  const dy=e.changedTouches[0].clientY-sy; if(phone()&&Math.abs(dy)>Math.abs(dx)*0.8){ sx=null; return; } /* v23 */
+  const dy=e.changedTouches[0].clientY-sy; if((phone()||(e.target.closest&&e.target.closest('.nsscroll')))&&Math.abs(dy)>Math.abs(dx)*0.8){ sx=null; return; } /* v23 */
   if(Math.abs(dx)>50){ swiped=true; (dx<0?next:prev)(); hint(); setTimeout(()=>swiped=false,400);} sx=null; },{passive:true});
 document.addEventListener('gesturestart',e=>e.preventDefault());
 let hinted=false; function hint(){ if(!hinted){hinted=true; document.getElementById('hint').classList.add('gone');} }
