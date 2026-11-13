@@ -377,6 +377,20 @@ html,body{height:100vh;height:100dvh}
   .ftw .ftinv{margin-top:24px}
 }
 /* ==== /v29 ==== */
+/* ==== v30 video preview ==== */
+.pvt{left:80px;top:180px;width:430px}
+.pvsub{margin-top:18px;font-size:15px;letter-spacing:.14em;line-height:1.7}
+.pvlab{margin:64px 0 0!important;padding-top:20px;border-top:1px solid #28282C;line-height:1.9}
+.pvlab span{display:block;font-weight:300;letter-spacing:.24em;font-size:10px}
+.pvf{box-sizing:content-box;left:560px;right:80px;top:180px;aspect-ratio:16/9;background:#000;border:1px solid #28282C}
+.pvv{display:block;width:100%;height:100%;object-fit:contain;background:#000}
+@media (max-width:600px) and (orientation:portrait){
+  .pvt{width:auto!important;margin-top:auto!important}
+  .pvsub{margin-top:12px}
+  .pvlab{margin-top:26px!important;padding-top:14px}
+  .slide .pvf{margin:26px 20px auto;aspect-ratio:16/9;height:auto!important}
+}
+/* ==== /v30 ==== */
 </style>
 </head>
 <body>
@@ -952,11 +966,21 @@ html,body{height:100vh;height:100dvh}
   <div class="foot"><span>NOVEMBER 2026</span><span>22</span><span>INTERNAL DOCUMENT</span></div>
 </section>
 
+<section class="slide" data-title="Video Preview" data-notes="Video Preview">
+  <div class="grain"></div>
+  <div class="meta"><span>YAN LA MORT D'UN JUSTE</span><span>2026</span><span>@FRAGILISM</span></div>
+  <div class="abs pvt ns" style="--i:0"><div class="display" style="font-size:96px">A small preview</div>
+    <p class="cap pvsub">of what a video can feel like.</p>
+    <div class="tiny lab pvlab">Holy Ghost<span>Tap to play · sound on</span></div></div>
+  <div class="abs pvf ns" style="--i:1"><video class="pvv" controls playsinline webkit-playsinline preload="metadata" poster="assets/video/holy-ghost-poster.jpg" src="assets/video/holy-ghost.mp4" disablepictureinpicture></video></div>
+  <div class="foot"><span>NOVEMBER 2026</span><span>23</span><span>INTERNAL DOCUMENT</span></div>
+</section>
+
 <section class="slide" data-title="Surprise Collaboration" data-notes="Surprise Collaboration">
   <div class="grain"></div>
   <div class="meta"><span>YAN LA MORT D'UN JUSTE</span><span>2026</span><span>@FRAGILISM</span></div>
   <div class="abs center-stage r" style="--d:1"><p class="tag r cbk" style="--d:1">One more thing</p><div class="display" style="font-size:132px">A surprise<br>collaboration.</div></div><div class="rule r" style="--d:2"></div>
-  <div class="foot"><span>NOVEMBER 2026</span><span>23</span><span>INTERNAL DOCUMENT</span></div>
+  <div class="foot"><span>NOVEMBER 2026</span><span>24</span><span>INTERNAL DOCUMENT</span></div>
 </section>
 
 <section class="slide" data-title="5th Talent × Fragilism" data-notes="5th Talent × Fragilism">
@@ -973,7 +997,7 @@ html,body{height:100vh;height:100dvh}
     </div>
     <div class="nsgoal ftinv"><div class="tiny lab" style="margin:0;white-space:nowrap">The investment</div><p class="cap">An investment in Tony’s company, and in Christian filmmaking.</p></div>
   </div>
-  <div class="foot"><span>NOVEMBER 2026</span><span>24</span><span>INTERNAL DOCUMENT</span></div>
+  <div class="foot"><span>NOVEMBER 2026</span><span>25</span><span>INTERNAL DOCUMENT</span></div>
 </section>
 
 <section class="slide" data-title="Next Steps" data-notes="Next Steps">
@@ -1018,7 +1042,7 @@ html,body{height:100vh;height:100dvh}
     <div class="nsvt"><p class="cap">Record labels with Christian artists hiring the Fragilism team to give their artists a complete, high-quality creative makeover.</p>
     <p class="cap nsa24">Fragilism is the A24 of fashion and music: labels and artists waiting for the Fragilism team to take on their project, the way directors wait for A24 to produce theirs.</p></div></div>
 </div></div>
-  <div class="foot"><span>NOVEMBER 2026</span><span>25</span><span>INTERNAL DOCUMENT</span></div>
+  <div class="foot"><span>NOVEMBER 2026</span><span>26</span><span>INTERNAL DOCUMENT</span></div>
 </section>
 
 <section class="slide" data-title="Deadline" data-notes="Deadline">
@@ -1027,7 +1051,7 @@ html,body{height:100vh;height:100dvh}
   <div class="abs center-stage r" style="--d:1"><div class="display" style="font-size:150px">Deadline</div>
     <p class="tag r" style="--d:2;padding-left:.36em;line-height:1.7;font-size:16px">End of Q1 · March 31, 2027</p>
     <p class="tag r" style="--d:3;padding-left:.36em;margin-top:10px">Everything above, done.</p></div><div class="rule r" style="--d:2;background:#BB0B15"></div>
-  <div class="foot"><span>NOVEMBER 2026</span><span>26</span><span>INTERNAL DOCUMENT</span></div>
+  <div class="foot"><span>NOVEMBER 2026</span><span>27</span><span>INTERNAL DOCUMENT</span></div>
 </section>
 
 <div id="notes"><b>SPEAKER NOTES</b><span></span></div>
@@ -1087,6 +1111,7 @@ function go(i){
   slides.forEach((s,k)=>{ s.classList.toggle('active',k===i); s.classList.toggle('before',k<i); s.classList.toggle('after',k>i); });
   if(phone()&&slides[i]) slides[i].scrollTop=0; /* v23 */
   { const ns=slides[i].querySelector('.nsscroll'); if(ns) ns.scrollTop=0; } /* v27 */
+  document.querySelectorAll('video.pvv').forEach(v=>{ if(!slides[i].contains(v)&&!v.paused) v.pause(); }); /* v30 */
   cur=i; { const V=vis(), q=V.indexOf(i); countEl.textContent=String(q+1).padStart(2,'0'); bar.style.width=((q+1)/V.length*100)+'%'; const sh=document.getElementById('swipehint'); if(sh) sh.classList.toggle('off',!(i===0||slides[i].querySelector('.puzzle'))); /* v26: cover + photo grids only */ } /* v24, v25 hint */
   notes.querySelector('span').textContent=slides[i].dataset.notes||'';
   if(history.replaceState) history.replaceState(null,'','#'+(i+1));
@@ -1127,6 +1152,7 @@ if(fsOK&&!document.body.classList.contains('static')){ fsBtn.hidden=false; docum
 }
 addEventListener('keydown',e=>{
   const k=e.key;
+  if((k===' '||k==='Enter')&&e.target&&e.target.closest&&e.target.closest('.pvf')) return; /* v30: space/enter on the focused video plays it */
   if((k==='ArrowDown'||k==='ArrowUp')&&!phone()){ const sc=slides[cur].querySelector('.nsscroll'); /* v27: arrows scroll the pipeline first */
     if(sc){ const d=k==='ArrowDown'?1:-1; if(d>0?sc.scrollTop+sc.clientHeight<sc.scrollHeight-2:sc.scrollTop>0){ e.preventDefault(); const y0=sc.scrollTop, y1=Math.max(0,Math.min(sc.scrollHeight-sc.clientHeight,y0+d*320)), t0=performance.now(); (function tw(t){ const f=Math.min(1,(t-t0)/320); sc.scrollTop=y0+(y1-y0)*(1-Math.pow(1-f,3)); if(f<1) requestAnimationFrame(tw); })(t0); return; } } }
   if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){ e.preventDefault(); next(); }
@@ -1152,6 +1178,8 @@ addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches
   const dy=e.changedTouches[0].clientY-sy; if((phone()||(e.target.closest&&e.target.closest('.nsscroll')))&&Math.abs(dy)>Math.abs(dx)*0.8){ sx=null; return; } /* v23 */
   if(Math.abs(dx)>50){ swiped=true; (dx<0?next:prev)(); hint(); setTimeout(()=>swiped=false,400);} sx=null; },{passive:true});
 document.addEventListener('gesturestart',e=>e.preventDefault());
+document.querySelectorAll('.pvf').forEach(f=>['click','touchstart','touchmove','touchend','pointerdown','pointerup','mousedown'].forEach(t=>f.addEventListener(t,e=>e.stopPropagation(),{passive:true}))); /* v30: video controls never reach deck nav */
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) document.querySelectorAll('video.pvv').forEach(v=>v.pause()); }); /* v30 */
 let hinted=false; function hint(){ if(!hinted){hinted=true; document.getElementById('hint').classList.add('gone');} }
 setTimeout(hint,6000);
 if(phoneMQ.addEventListener) phoneMQ.addEventListener('change',()=>{ if(phone()&&overview) toggleOverview(false); phoneMerge(phone()); go(cur); fit(); }); addEventListener('resize',fit); addEventListener('orientationchange',()=>setTimeout(fit,250));
